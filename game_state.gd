@@ -168,17 +168,22 @@ func load_progress() -> void:
 
 
 func calculate_grade(time_seconds: float, deaths: int, fragments: int, par_time: float) -> String:
-	var score := 100
-	if time_seconds > par_time:
-		score -= int((time_seconds - par_time) / 3.0)
-	score -= deaths * 12
-	score += fragments * 4
-
-	if score >= 95:
+	# S is intentionally prestigious: flawless, complete, and fast.
+	if deaths == 0 and fragments >= 3 and time_seconds <= par_time * 0.80:
 		return "S"
-	if score >= 82:
+
+	var score := 82
+	score += fragments * 6
+	score -= deaths * 14
+
+	if time_seconds <= par_time:
+		score += 8
+	else:
+		score -= int((time_seconds - par_time) / 2.5)
+
+	if score >= 88:
 		return "A"
-	if score >= 68:
+	if score >= 72:
 		return "B"
 	return "C"
 
