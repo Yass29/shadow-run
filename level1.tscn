@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://doxplx6nrjfq1"]
+[gd_scene load_steps=19 format=3 uid="uid://doxplx6nrjfq1"]
 
 [ext_resource type="Script" uid="uid://gnog5jweu2oj" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://exit_gate.gd" id="5_exit"]
 [ext_resource type="Script" path="res://drone.gd" id="6_drone"]
 [ext_resource type="Script" path="res://victory_overlay.gd" id="7_victory"]
+[ext_resource type="Script" path="res://spike_hazard.gd" id="8_spike"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -37,6 +38,9 @@ radius = 16.0
 
 [sub_resource type="RectangleShape2D" id="DroneDetectShape"]
 size = Vector2(230, 150)
+
+[sub_resource type="RectangleShape2D" id="SpikeShapeIntro"]
+size = Vector2(120, 32)
 
 [node name="Level1" type="Node2D"]
 script = ExtResource("4_level")
@@ -175,6 +179,23 @@ position = Vector2(930, 470)
 theme_override_colors/font_color = Color(0.72, 0.73, 0.9, 1)
 theme_override_font_sizes/font_size = 14
 text = "Jump the gap"
+
+[node name="SpikeIntro" type="Area2D" parent="."]
+position = Vector2(1080, 506)
+script = ExtResource("8_spike")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeIntro"]
+shape = SubResource("SpikeShapeIntro")
+
+[node name="Visual" type="Polygon2D" parent="SpikeIntro"]
+polygon = PackedVector2Array(-60, 16, -45, -16, -30, 16, -15, -16, 0, 16, 15, -16, 30, 16, 45, -16, 60, 16)
+color = Color(0.92, 0.28, 0.46, 1)
+
+[node name="SpikeHint" type="Label" parent="."]
+position = Vector2(1000, 438)
+theme_override_colors/font_color = Color(1, 0.55, 0.65, 1)
+theme_override_font_sizes/font_size = 13
+text = "Jump this hazard."
 
 [node name="CheckpointMarker" type="Polygon2D" parent="."]
 position = Vector2(1250, 462)
