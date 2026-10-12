@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -12,6 +12,7 @@
 [ext_resource type="Script" path="res://shadow_switch.gd" id="10_switch"]
 [ext_resource type="Script" path="res://drone.gd" id="11_drone"]
 [ext_resource type="Script" path="res://shadow_portal.gd" id="12_portal"]
+[ext_resource type="Script" path="res://secret_cache.gd" id="13_secret"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -54,6 +55,9 @@ size = Vector2(250, 180)
 
 [sub_resource type="CircleShape2D" id="PortalShape"]
 radius = 30.0
+
+[sub_resource type="CircleShape2D" id="SecretShape"]
+radius = 22.0
 
 [node name="Level5" type="Node2D"]
 script = ExtResource("4_level")
@@ -354,6 +358,17 @@ color = Color(0.24, 0.07, 0.18, 1)
 [node name="Glow" type="Polygon2D" parent="CoreLift"]
 polygon = PackedVector2Array(-85, 10, 85, 10, 85, 17, -85, 17)
 color = Color(1, 0.35, 0.66, 1)
+[node name="SecretCache" type="Area2D" parent="."]
+position = Vector2(2110, 320)
+script = ExtResource("13_secret")
+reward = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SecretCache"]
+shape = SubResource("SecretShape")
+
+[node name="Visual" type="Polygon2D" parent="SecretCache"]
+polygon = PackedVector2Array(0, -24, 18, -18, 24, 0, 18, 18, 0, 24, -18, 18, -24, 0, -18, -18)
+color = Color(1, 0.48, 0.82, 1)
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="HUD"]
