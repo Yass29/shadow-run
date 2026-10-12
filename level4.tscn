@@ -372,17 +372,6 @@ theme_override_colors/font_color = Color(0.80, 0.70, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "GO UP. The street is the dangerous route."
 
-[node name="SpikeTrap" type="Area2D" parent="."]
-position = Vector2(1460, 505)
-script = ExtResource("9_spike")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeTrap"]
-shape = SubResource("SpikeShape")
-
-[node name="Visual" type="Polygon2D" parent="SpikeTrap"]
-polygon = PackedVector2Array(-85, 17, -65, -17, -45, 17, -25, -17, -5, 17, 15, -17, 35, 17, 55, -17, 75, 17, 85, -17)
-color = Color(0.92, 0.24, 0.44, 1)
-
 [node name="TowerLock" type="StaticBody2D" parent="."]
 position = Vector2(3160, 433)
 
