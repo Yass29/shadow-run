@@ -2,6 +2,7 @@ extends Area2D
 
 var base_y := 0.0
 var time := 0.0
+var collected := false
 
 func _ready() -> void:
 	base_y = position.y
@@ -13,5 +14,11 @@ func _process(delta: float) -> void:
 	rotation += delta * 0.9
 
 func _on_body_entered(body: Node) -> void:
-	if body is CharacterBody2D:
-		queue_free()
+	if collected or not body is CharacterBody2D:
+		return
+
+	collected = true
+	var level := get_parent()
+	if level.has_method("collect_fragment"):
+		level.collect_fragment()
+	queue_free()
