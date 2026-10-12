@@ -6,6 +6,9 @@ const NORMAL_COLLISION_SIZE := Vector2(40, 68)
 const SHADOW_COLLISION_SIZE := Vector2(76, 22)
 const NORMAL_VISUAL_SCALE := Vector2.ONE
 const SHADOW_VISUAL_SCALE := Vector2(1.25, 0.60)
+const COYOTE_TIME := 0.12
+const JUMP_BUFFER_TIME := 0.12
+const MAX_FALL_SPEED := 900.0
 
 var is_shadow := false
 var facing := 1.0
@@ -14,6 +17,8 @@ var anim_time := 0.0
 var dash_cooldown := 0.0
 var dash_latched := false
 var dash_flash := 0.0
+var coyote_timer := 0.0
+var jump_buffer_timer := 0.0
 
 @onready var body: Node2D = $Body
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -32,11 +37,22 @@ func _physics_process(delta: float) -> void:
 	dash_cooldown = max(dash_cooldown - delta, 0.0)
 	dash_flash = max(dash_flash - delta, 0.0)
 
-	if not is_on_floor():
+	if is_on_floor():
+		coyote_timer = COYOTE_TIME
+	else:
+		coyote_timer = max(coyote_timer - delta, 0.0)
 		velocity += get_gravity() * delta
+		velocity.y = min(velocity.y, MAX_FALL_SPEED)
 
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor() and not is_shadow:
+	if Input.is_action_just_pressed("ui_accept"):
+		jump_buffer_timer = JUMP_BUFFER_TIME
+	else:
+		jump_buffer_timer = max(jump_buffer_timer - delta, 0.0)
+
+	if jump_buffer_timer > 0.0 and coyote_timer > 0.0 and not is_shadow:
 		velocity.y = JUMP_VELOCITY
+		jump_buffer_timer = 0.0
+		coyote_timer = 0.0
 
 	var direction := Input.get_axis("ui_left", "ui_right")
 	if direction:
