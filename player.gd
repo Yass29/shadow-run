@@ -14,10 +14,12 @@ var anim_time := 0.0
 @onready var body: Node2D = $Body
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var floor_shadow: Polygon2D = $FloorShadow
+@onready var shadow_aura: Polygon2D = $ShadowAura
 
 func _ready() -> void:
 	collision.shape.size = NORMAL_COLLISION_SIZE
 	body.scale = NORMAL_VISUAL_SCALE
+	shadow_aura.modulate.a = 0.0
 	collision_mask = 3
 
 func _physics_process(delta: float) -> void:
@@ -64,11 +66,16 @@ func animate_character(direction: float, delta: float) -> void:
 		body.rotation = lerpf(body.rotation, 0.0, min(delta * 12.0, 1.0))
 		floor_shadow.scale = floor_shadow.scale.lerp(Vector2(1.6, 0.85), min(delta * 12.0, 1.0))
 		floor_shadow.modulate = floor_shadow.modulate.lerp(Color(0.55, 0.30, 1.0, 0.75), min(delta * 10.0, 1.0))
+		shadow_aura.modulate = shadow_aura.modulate.lerp(Color(0.72, 0.42, 1.0, 0.42), min(delta * 12.0, 1.0))
+		var pulse := 1.0 + sin(anim_time * 8.0) * 0.08
+		shadow_aura.scale = Vector2(1.18 * pulse, 0.82 * pulse)
 		return
 
 	body.modulate = body.modulate.lerp(Color.WHITE, min(delta * 10.0, 1.0))
 	floor_shadow.scale = floor_shadow.scale.lerp(Vector2.ONE, min(delta * 10.0, 1.0))
 	floor_shadow.modulate = floor_shadow.modulate.lerp(Color(1.0, 1.0, 1.0, 0.35), min(delta * 10.0, 1.0))
+	shadow_aura.modulate.a = lerpf(shadow_aura.modulate.a, 0.0, min(delta * 12.0, 1.0))
+	shadow_aura.scale = shadow_aura.scale.lerp(Vector2.ONE, min(delta * 10.0, 1.0))
 
 	var moving: bool = abs(direction) > 0.01 and is_on_floor()
 	var bob := sin(anim_time * 12.0) * 2.2 if moving else sin(anim_time * 3.0) * 1.0
