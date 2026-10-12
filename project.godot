@@ -21,6 +21,7 @@ GameState="*res://game_state.gd"
 PauseManager="*res://pause_manager.gd"
 AudioManager="*res://audio_manager.gd"
 ScreenTransition="*res://screen_transition.gd"
+FXManager="*res://fx_manager.gd"
 
 [display]
 
