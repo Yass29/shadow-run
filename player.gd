@@ -102,6 +102,7 @@ func handle_shadow_dash() -> void:
 	dash_flash = 0.16
 	camera_shake = 0.16
 	shadow_energy -= DASH_ENERGY_COST
+	AudioManager.play_sfx("dash")
 	velocity.x = facing * 760.0
 	velocity.y = 0.0
 
@@ -162,6 +163,8 @@ func set_shadow_mode(enabled: bool) -> void:
 		return
 
 	is_shadow = enabled
+	spawn_transform_burst()
+	AudioManager.play_sfx("shadow_in" if is_shadow else "shadow_out")
 
 	if is_shadow:
 		collision.shape.size = SHADOW_COLLISION_SIZE
@@ -206,6 +209,24 @@ func animate_character(direction: float, delta: float) -> void:
 	else:
 		body.rotation = lerpf(body.rotation, 0.0, min(delta * 10.0, 1.0))
 
+
+func spawn_transform_burst() -> void:
+	for i in range(6):
+		var shard := Polygon2D.new()
+		shard.polygon = PackedVector2Array([Vector2(0, -4), Vector2(4, 0), Vector2(0, 4), Vector2(-4, 0)])
+		shard.color = Color(0.72, 0.42, 1.0, 0.9) if is_shadow else Color(0.45, 0.9, 1.0, 0.75)
+		shard.global_position = global_position + Vector2(0, 6)
+		shard.z_index = 25
+		get_parent().add_child(shard)
+
+		var angle := TAU * float(i) / 6.0
+		var target := shard.position + Vector2(cos(angle), sin(angle)) * 34.0
+		var tween := shard.create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(shard, "position", target, 0.22)
+		tween.tween_property(shard, "modulate:a", 0.0, 0.22)
+		tween.set_parallel(false)
+		tween.tween_callback(shard.queue_free)
 
 func apply_selected_skin() -> void:
 	if not Engine.has_singleton("GameState") and not has_node("/root/GameState"):

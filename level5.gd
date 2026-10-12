@@ -18,6 +18,8 @@ func _process(_delta: float) -> void:
 	elapsed_time += _delta
 	if player.position.x > 1900.0 and checkpoint.x < 1900.0:
 		checkpoint = Vector2(1930, 420)
+		AudioManager.play_sfx("checkpoint")
+		FXManager.checkpoint_burst(checkpoint)
 	if player.position.y > 720.0:
 		respawn_player("THE CORE REJECTED YOU.")
 
@@ -33,6 +35,7 @@ func respawn_player(message: String = "CORE DEFENSE TRIGGERED.") -> void:
 		return
 	respawning = true
 	deaths += 1
+	AudioManager.play_sfx("alert")
 	alert.text = message
 	alert.visible = true
 	player.position = checkpoint

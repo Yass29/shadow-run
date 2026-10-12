@@ -19,6 +19,7 @@ func _on_body_entered(body: Node) -> void:
 
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
+	AudioManager.play_sfx("victory")
 
 	if level.has_node("Drone"):
 		level.get_node("Drone").set_process(false)
