@@ -19,6 +19,7 @@ func _process(_delta: float) -> void:
 	if player.position.x > 1900.0 and checkpoint.x < 1900.0:
 		checkpoint = Vector2(1930, 420)
 		AudioManager.play_sfx("checkpoint")
+		FXManager.checkpoint_burst(checkpoint)
 	if player.position.y > 720.0:
 		respawn_player("THE CORE REJECTED YOU.")
 
