@@ -27,6 +27,8 @@ var jump_buffer_timer := 0.0
 var shadow_energy := SHADOW_MAX_ENERGY
 var shadow_exhausted := false
 var shadow_meter: ProgressBar
+var camera_shake := 0.0
+var dash_trail: Line2D
 
 @onready var body: Node2D = $Body
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -39,12 +41,14 @@ func _ready() -> void:
 	shadow_aura.modulate.a = 0.0
 	collision_mask = 3
 	create_shadow_meter()
+	create_dash_trail()
 	apply_selected_skin()
 
 func _physics_process(delta: float) -> void:
 	anim_time += delta
 	dash_cooldown = max(dash_cooldown - delta, 0.0)
 	dash_flash = max(dash_flash - delta, 0.0)
+	camera_shake = max(camera_shake - delta, 0.0)
 
 	if is_on_floor():
 		coyote_timer = COYOTE_TIME
@@ -76,6 +80,8 @@ func _physics_process(delta: float) -> void:
 	handle_shadow_dash()
 	shadow_meter.value = shadow_energy
 	move_and_slide()
+	update_dash_trail(delta)
+	update_camera_fx()
 	animate_character(direction, delta)
 
 func handle_shadow_dash() -> void:
@@ -94,9 +100,41 @@ func handle_shadow_dash() -> void:
 	dash_latched = true
 	dash_cooldown = 0.65
 	dash_flash = 0.16
+	camera_shake = 0.16
 	shadow_energy -= DASH_ENERGY_COST
 	velocity.x = facing * 760.0
 	velocity.y = 0.0
+
+func create_dash_trail() -> void:
+	dash_trail = Line2D.new()
+	dash_trail.width = 10.0
+	dash_trail.default_color = Color(0.72, 0.42, 1.0, 0.45)
+	dash_trail.z_index = -3
+	get_parent().add_child(dash_trail)
+
+func update_dash_trail(_delta: float) -> void:
+	if dash_trail == null:
+		return
+
+	if dash_flash > 0.0:
+		dash_trail.add_point(global_position + Vector2(0, 8))
+
+	while dash_trail.get_point_count() > 9:
+		dash_trail.remove_point(0)
+
+	if dash_flash <= 0.0 and dash_trail.get_point_count() > 0:
+		dash_trail.remove_point(0)
+
+func update_camera_fx() -> void:
+	if not has_node("Camera2D"):
+		return
+
+	var camera: Camera2D = $Camera2D
+	if camera_shake > 0.0:
+		var amount := camera_shake / 0.16
+		camera.offset = Vector2(sin(anim_time * 85.0) * 5.0, cos(anim_time * 73.0) * 3.0) * amount
+	else:
+		camera.offset = camera.offset.lerp(Vector2.ZERO, 0.25)
 
 func create_shadow_meter() -> void:
 	shadow_meter = ProgressBar.new()

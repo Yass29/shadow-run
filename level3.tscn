@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://rain.gd" id="5_rain"]
 [ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
 [ext_resource type="Script" path="res://level3_exit.gd" id="7_exit"]
+[ext_resource type="Script" path="res://lightning_flash.gd" id="8_lightning"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -47,6 +48,11 @@ layer = 10
 [node name="Rain" type="Node2D" parent="RainLayer"]
 script = ExtResource("5_rain")
 
+[node name="Lightning" type="ColorRect" parent="RainLayer"]
+offset_right = 1150.0
+offset_bottom = 647.0
+mouse_filter = 2
+script = ExtResource("8_lightning")
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(140, 420)
 script = ExtResource("1_player")

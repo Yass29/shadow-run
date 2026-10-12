@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://light_beam.gd" id="5_beam"]
 [ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
 [ext_resource type="Script" path="res://level5_exit.gd" id="7_exit"]
+[ext_resource type="Script" path="res://moving_platform.gd" id="8_move"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -240,6 +241,23 @@ color = Color(0.35, 0.10, 0.22, 1)
 polygon = PackedVector2Array(-28, -48, 28, -48, 28, 48, -28, 48)
 color = Color(1, 0.35, 0.60, 0.9)
 
+[node name="CoreLift" type="AnimatableBody2D" parent="."]
+position = Vector2(2470, 380)
+script = ExtResource("8_move")
+travel = Vector2(250, -75)
+speed = 1.55
+phase = 0.8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CoreLift"]
+shape = SubResource("PlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="CoreLift"]
+polygon = PackedVector2Array(-85, -17, 85, -17, 85, 17, -85, 17)
+color = Color(0.24, 0.07, 0.18, 1)
+
+[node name="Glow" type="Polygon2D" parent="CoreLift"]
+polygon = PackedVector2Array(-85, 10, 85, 10, 85, 17, -85, 17)
+color = Color(1, 0.35, 0.66, 1)
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="HUD"]
