@@ -18,6 +18,7 @@ var anim_time := 0.0
 func _ready() -> void:
 	collision.shape.size = NORMAL_COLLISION_SIZE
 	body.scale = NORMAL_VISUAL_SCALE
+	collision_mask = 3
 
 func _physics_process(delta: float) -> void:
 	anim_time += delta
@@ -47,8 +48,10 @@ func set_shadow_mode(enabled: bool) -> void:
 
 	if is_shadow:
 		collision.shape.size = SHADOW_COLLISION_SIZE
+		collision_mask = 1
 	else:
 		collision.shape.size = NORMAL_COLLISION_SIZE
+		collision_mask = 3
 
 func animate_character(direction: float, delta: float) -> void:
 	var base_scale := SHADOW_VISUAL_SCALE if is_shadow else NORMAL_VISUAL_SCALE
