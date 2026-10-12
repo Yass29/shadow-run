@@ -20,6 +20,7 @@ func _process(_delta: float) -> void:
 	if player.position.x > 1450.0 and checkpoint.x < 1450.0:
 		checkpoint = Vector2(1480, 420)
 		AudioManager.play_sfx("checkpoint")
+		FXManager.checkpoint_burst(checkpoint)
 		checkpoint_message.visible = true
 		await get_tree().create_timer(1.1).timeout
 		checkpoint_message.visible = false
