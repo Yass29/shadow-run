@@ -9,6 +9,11 @@ const SHADOW_VISUAL_SCALE := Vector2(1.25, 0.60)
 const COYOTE_TIME := 0.12
 const JUMP_BUFFER_TIME := 0.12
 const MAX_FALL_SPEED := 900.0
+const SHADOW_MAX_ENERGY := 100.0
+const SHADOW_DRAIN_RATE := 30.0
+const SHADOW_RECHARGE_RATE := 24.0
+const SHADOW_RECOVER_THRESHOLD := 35.0
+const DASH_ENERGY_COST := 22.0
 
 var is_shadow := false
 var facing := 1.0
@@ -19,6 +24,9 @@ var dash_latched := false
 var dash_flash := 0.0
 var coyote_timer := 0.0
 var jump_buffer_timer := 0.0
+var shadow_energy := SHADOW_MAX_ENERGY
+var shadow_exhausted := false
+var shadow_meter: ProgressBar
 
 @onready var body: Node2D = $Body
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -30,6 +38,7 @@ func _ready() -> void:
 	body.scale = NORMAL_VISUAL_SCALE
 	shadow_aura.modulate.a = 0.0
 	collision_mask = 3
+	create_shadow_meter()
 	apply_selected_skin()
 
 func _physics_process(delta: float) -> void:
@@ -61,8 +70,11 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED * 5.0 * delta)
 
-	set_shadow_mode(Input.is_key_pressed(KEY_SHIFT))
+	update_shadow_energy(delta)
+	var wants_shadow := Input.is_key_pressed(KEY_SHIFT) and not shadow_exhausted and shadow_energy > 0.0
+	set_shadow_mode(wants_shadow)
 	handle_shadow_dash()
+	shadow_meter.value = shadow_energy
 	move_and_slide()
 	animate_character(direction, delta)
 
@@ -76,11 +88,36 @@ func handle_shadow_dash() -> void:
 	if dash_latched or not shadow_dash_enabled or not is_shadow or dash_cooldown > 0.0:
 		return
 
+	if shadow_energy < DASH_ENERGY_COST:
+		return
+
 	dash_latched = true
 	dash_cooldown = 0.65
 	dash_flash = 0.16
+	shadow_energy -= DASH_ENERGY_COST
 	velocity.x = facing * 760.0
 	velocity.y = 0.0
+
+func create_shadow_meter() -> void:
+	shadow_meter = ProgressBar.new()
+	shadow_meter.position = Vector2(-40, -66)
+	shadow_meter.size = Vector2(80, 8)
+	shadow_meter.min_value = 0.0
+	shadow_meter.max_value = SHADOW_MAX_ENERGY
+	shadow_meter.value = shadow_energy
+	shadow_meter.show_percentage = false
+	shadow_meter.z_index = 30
+	add_child(shadow_meter)
+
+func update_shadow_energy(delta: float) -> void:
+	if is_shadow:
+		shadow_energy = max(shadow_energy - SHADOW_DRAIN_RATE * delta, 0.0)
+		if shadow_energy <= 0.0:
+			shadow_exhausted = true
+	else:
+		shadow_energy = min(shadow_energy + SHADOW_RECHARGE_RATE * delta, SHADOW_MAX_ENERGY)
+		if shadow_exhausted and shadow_energy >= SHADOW_RECOVER_THRESHOLD:
+			shadow_exhausted = false
 
 func set_shadow_mode(enabled: bool) -> void:
 	if is_shadow == enabled:
