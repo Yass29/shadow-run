@@ -1,71 +1,68 @@
-[gd_scene load_steps=8 format=3 uid="uid://doxplx6nrjfq1"]
+[gd_scene load_steps=14 format=3 uid="uid://doxplx6nrjfq1"]
 
-[ext_resource type="Script" uid="uid://gnog5jweu2oj" path="res://player.gd" id="1_dopym"]
+[ext_resource type="Script" uid="uid://gnog5jweu2oj" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
 [ext_resource type="Script" path="res://energy_fragment.gd" id="3_energy"]
+[ext_resource type="Script" path="res://level1.gd" id="4_level"]
+[ext_resource type="Script" path="res://exit_gate.gd" id="5_exit"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
-size = Vector2(52, 70)
+[sub_resource type="RectangleShape2D" id="PlayerShape"]
+size = Vector2(40, 68)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
-size = Vector2(1150, 100)
+[sub_resource type="RectangleShape2D" id="GroundShapeA"]
+size = Vector2(1050, 100)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_obstacle"]
+[sub_resource type="RectangleShape2D" id="GroundShapeB"]
+size = Vector2(1420, 100)
+
+[sub_resource type="RectangleShape2D" id="LowObstacleShape"]
 size = Vector2(180, 110)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+[sub_resource type="RectangleShape2D" id="PlatformShape"]
 size = Vector2(180, 36)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fragment"]
+[sub_resource type="RectangleShape2D" id="SmallPlatformShape"]
+size = Vector2(130, 30)
+
+[sub_resource type="RectangleShape2D" id="ShadowGateShape"]
+size = Vector2(58, 118)
+
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(54, 96)
+
+[sub_resource type="CircleShape2D" id="FragmentShape"]
 radius = 16.0
 
 [node name="Level1" type="Node2D"]
+script = ExtResource("4_level")
 
 [node name="Background" type="Polygon2D" parent="."]
+z_index = -30
+polygon = PackedVector2Array(0, 0, 2600, 0, 2600, 647, 0, 647)
+color = Color(0.025, 0.03, 0.075, 1)
+
+[node name="FarSkyline" type="Polygon2D" parent="."]
 z_index = -20
-polygon = PackedVector2Array(0, 0, 1150, 0, 1150, 647, 0, 647)
-color = Color(0.035, 0.045, 0.09, 1)
+polygon = PackedVector2Array(0, 390, 160, 390, 160, 260, 250, 260, 250, 410, 430, 410, 430, 300, 540, 300, 540, 410, 710, 410, 710, 235, 800, 235, 800, 410, 980, 410, 980, 285, 1070, 285, 1070, 410, 1260, 410, 1260, 250, 1370, 250, 1370, 410, 1550, 410, 1550, 310, 1640, 310, 1640, 410, 1830, 410, 1830, 220, 1930, 220, 1930, 410, 2100, 410, 2100, 290, 2220, 290, 2220, 410, 2400, 410, 2400, 245, 2500, 245, 2500, 410, 2600, 410, 2600, 520, 0, 520)
+color = Color(0.065, 0.07, 0.14, 1)
 
-[node name="MoonGlow" type="Polygon2D" parent="."]
-z_index = -18
-position = Vector2(930, 120)
-polygon = PackedVector2Array(-54, -54, 54, -54, 54, 54, -54, 54)
-color = Color(0.16, 0.18, 0.35, 0.45)
+[node name="NearSkyline" type="Polygon2D" parent="."]
+z_index = -15
+polygon = PackedVector2Array(0, 455, 120, 455, 120, 350, 235, 350, 235, 455, 390, 455, 390, 365, 520, 365, 520, 455, 660, 455, 660, 330, 760, 330, 760, 455, 920, 455, 920, 375, 1050, 375, 1050, 455, 1210, 455, 1210, 345, 1340, 345, 1340, 455, 1500, 455, 1500, 365, 1640, 365, 1640, 455, 1810, 455, 1810, 345, 1940, 345, 1940, 455, 2100, 455, 2100, 370, 2250, 370, 2250, 455, 2400, 455, 2400, 330, 2520, 330, 2520, 455, 2600, 455, 2600, 530, 0, 530)
+color = Color(0.095, 0.075, 0.18, 1)
 
-[node name="Skyline1" type="Polygon2D" parent="."]
-z_index = -12
-polygon = PackedVector2Array(0, 355, 170, 355, 170, 245, 250, 245, 250, 365, 430, 365, 430, 285, 515, 285, 515, 365, 690, 365, 690, 225, 770, 225, 770, 365, 930, 365, 930, 270, 1010, 270, 1010, 365, 1150, 365, 1150, 510, 0, 510)
-color = Color(0.07, 0.08, 0.15, 1)
-
-[node name="Skyline2" type="Polygon2D" parent="."]
-z_index = -11
-polygon = PackedVector2Array(0, 425, 120, 425, 120, 330, 225, 330, 225, 425, 360, 425, 360, 345, 470, 345, 470, 425, 610, 425, 610, 315, 700, 315, 700, 425, 845, 425, 845, 350, 980, 350, 980, 425, 1150, 425, 1150, 510, 0, 510)
-color = Color(0.10, 0.09, 0.20, 1)
-
-[node name="Title" type="Label" parent="."]
-offset_left = 32.0
-offset_top = 24.0
-offset_right = 360.0
-offset_bottom = 58.0
-theme_override_colors/font_color = Color(0.82, 0.82, 1, 1)
-theme_override_font_sizes/font_size = 24
-text = "SHADOW RUN // PROTOTYPE"
-
-[node name="Controls" type="Label" parent="."]
-offset_left = 34.0
-offset_top = 62.0
-offset_right = 560.0
-offset_bottom = 92.0
-theme_override_colors/font_color = Color(0.62, 0.64, 0.78, 1)
-theme_override_font_sizes/font_size = 16
-text = "← → move    SPACE jump    hold SHIFT become shadow"
+[node name="Moon" type="Polygon2D" parent="."]
+z_index = -24
+position = Vector2(980, 120)
+polygon = PackedVector2Array(-46, -46, 46, -46, 46, 46, -46, 46)
+color = Color(0.17, 0.19, 0.37, 0.6)
 
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(150, 420)
-script = ExtResource("1_dopym")
+script = ExtResource("1_player")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_player")
+shape = SubResource("PlayerShape")
 
 [node name="FloorShadow" type="Polygon2D" parent="Player"]
 z_index = -1
@@ -76,84 +73,274 @@ modulate = Color(1, 1, 1, 0.35)
 
 [node name="Body" parent="Player" instance=ExtResource("2_hero")]
 
-[node name="Ground" type="StaticBody2D" parent="."]
-position = Vector2(575, 560)
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(250, -40)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_left = 0
+limit_top = 0
+limit_right = 2600
+limit_bottom = 647
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
-shape = SubResource("RectangleShape2D_ground")
+[node name="GroundA" type="StaticBody2D" parent="."]
+position = Vector2(525, 560)
 
-[node name="Visual" type="Polygon2D" parent="Ground"]
-polygon = PackedVector2Array(-575, -50, 575, -50, 575, 50, -575, 50)
-color = Color(0.09, 0.055, 0.16, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundA"]
+shape = SubResource("GroundShapeA")
 
-[node name="GroundTop" type="Polygon2D" parent="Ground"]
-polygon = PackedVector2Array(-575, -50, 575, -50, 575, -44, -575, -44)
-color = Color(0.46, 0.31, 0.78, 1)
+[node name="Visual" type="Polygon2D" parent="GroundA"]
+polygon = PackedVector2Array(-525, -50, 525, -50, 525, 50, -525, 50)
+color = Color(0.08, 0.045, 0.145, 1)
 
-[node name="LowObstacle" type="StaticBody2D" parent="."]
+[node name="TopGlow" type="Polygon2D" parent="GroundA"]
+polygon = PackedVector2Array(-525, -50, 525, -50, 525, -44, -525, -44)
+color = Color(0.48, 0.31, 0.8, 1)
+
+[node name="GroundB" type="StaticBody2D" parent="."]
+position = Vector2(1890, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GroundB"]
+shape = SubResource("GroundShapeB")
+
+[node name="Visual" type="Polygon2D" parent="GroundB"]
+polygon = PackedVector2Array(-710, -50, 710, -50, 710, 50, -710, 50)
+color = Color(0.08, 0.045, 0.145, 1)
+
+[node name="TopGlow" type="Polygon2D" parent="GroundB"]
+polygon = PackedVector2Array(-710, -50, 710, -50, 710, -44, -710, -44)
+color = Color(0.48, 0.31, 0.8, 1)
+
+[node name="LowObstacle1" type="StaticBody2D" parent="."]
 position = Vector2(520, 425)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LowObstacle"]
-shape = SubResource("RectangleShape2D_obstacle")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LowObstacle1"]
+shape = SubResource("LowObstacleShape")
 
-[node name="Visual" type="Polygon2D" parent="LowObstacle"]
+[node name="Visual" type="Polygon2D" parent="LowObstacle1"]
 polygon = PackedVector2Array(-90, -55, 90, -55, 90, 55, -90, 55)
 color = Color(0.19, 0.14, 0.31, 1)
 
-[node name="EdgeGlow" type="Polygon2D" parent="LowObstacle"]
+[node name="EdgeGlow" type="Polygon2D" parent="LowObstacle1"]
 polygon = PackedVector2Array(-90, 49, 90, 49, 90, 55, -90, 55)
-color = Color(0.62, 0.36, 0.92, 1)
+color = Color(0.63, 0.36, 0.94, 1)
 
-[node name="Hint" type="Label" parent="LowObstacle"]
-offset_left = -90.0
+[node name="Hint" type="Label" parent="LowObstacle1"]
+offset_left = -105.0
 offset_top = -92.0
-offset_right = 115.0
+offset_right = 130.0
 offset_bottom = -64.0
-theme_override_colors/font_color = Color(0.78, 0.68, 1, 1)
+theme_override_colors/font_color = Color(0.79, 0.68, 1, 1)
 theme_override_font_sizes/font_size = 14
 text = "Too low? Become your shadow."
 
-[node name="Platform" type="StaticBody2D" parent="."]
-position = Vector2(810, 430)
+[node name="Platform1" type="StaticBody2D" parent="."]
+position = Vector2(820, 430)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
-shape = SubResource("RectangleShape2D_platform")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
+shape = SubResource("PlatformShape")
 
-[node name="Visual" type="Polygon2D" parent="Platform"]
+[node name="Visual" type="Polygon2D" parent="Platform1"]
 polygon = PackedVector2Array(-90, -18, 90, -18, 90, 18, -90, 18)
 color = Color(0.14, 0.11, 0.24, 1)
 
-[node name="EnergyFragment" type="Area2D" parent="."]
-position = Vector2(810, 370)
+[node name="EnergyFragment1" type="Area2D" parent="."]
+position = Vector2(820, 370)
 script = ExtResource("3_energy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnergyFragment"]
-shape = SubResource("CircleShape2D_fragment")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnergyFragment1"]
+shape = SubResource("FragmentShape")
 
-[node name="Crystal" type="Polygon2D" parent="EnergyFragment"]
+[node name="Crystal" type="Polygon2D" parent="EnergyFragment1"]
 polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
 color = Color(0.55, 0.77, 1, 1)
 
-[node name="Core" type="Polygon2D" parent="EnergyFragment"]
+[node name="Core" type="Polygon2D" parent="EnergyFragment1"]
 polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
-color = Color(0.92, 0.96, 1, 1)
+color = Color(0.94, 0.97, 1, 1)
 
-[node name="ExitMarker" type="Polygon2D" parent="."]
-position = Vector2(1040, 454)
-polygon = PackedVector2Array(-22, -44, 22, -44, 22, 44, -22, 44)
-color = Color(0.18, 0.36, 0.42, 1)
+[node name="PitHint" type="Label" parent="."]
+position = Vector2(930, 470)
+theme_override_colors/font_color = Color(0.72, 0.73, 0.9, 1)
+theme_override_font_sizes/font_size = 14
+text = "Jump the gap"
 
-[node name="ExitGlow" type="Polygon2D" parent="."]
-position = Vector2(1040, 454)
-polygon = PackedVector2Array(-16, -38, 16, -38, 16, 38, -16, 38)
-color = Color(0.35, 0.95, 0.83, 0.75)
+[node name="CheckpointMarker" type="Polygon2D" parent="."]
+position = Vector2(1250, 462)
+polygon = PackedVector2Array(-5, -45, 5, -45, 5, 45, -5, 45)
+color = Color(0.35, 0.95, 0.82, 0.65)
 
-[node name="ExitText" type="Label" parent="."]
-offset_left = 995.0
-offset_top = 392.0
-offset_right = 1095.0
-offset_bottom = 420.0
-theme_override_colors/font_color = Color(0.6, 1, 0.92, 1)
+[node name="CheckpointText" type="Label" parent="."]
+position = Vector2(1210, 395)
+theme_override_colors/font_color = Color(0.5, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "CHECKPOINT"
+
+[node name="ShadowGate1" type="StaticBody2D" parent="."]
+position = Vector2(1370, 451)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShadowGate1"]
+shape = SubResource("ShadowGateShape")
+
+[node name="Visual" type="Polygon2D" parent="ShadowGate1"]
+polygon = PackedVector2Array(-29, -59, 29, -59, 29, 59, -29, 59)
+color = Color(0.37, 0.16, 0.55, 0.62)
+
+[node name="Rune" type="Label" parent="ShadowGate1"]
+offset_left = -22.0
+offset_top = -16.0
+offset_right = 24.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0.85, 0.68, 1, 1)
+theme_override_font_sizes/font_size = 26
+text = "◈"
+horizontal_alignment = 1
+
+[node name="GateHint" type="Label" parent="."]
+position = Vector2(1295, 350)
+theme_override_colors/font_color = Color(0.82, 0.7, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Solid to you. Not to your shadow."
+
+[node name="Step1" type="StaticBody2D" parent="."]
+position = Vector2(1540, 470)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1"]
+shape = SubResource("SmallPlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="Step1"]
+polygon = PackedVector2Array(-65, -15, 65, -15, 65, 15, -65, 15)
+color = Color(0.14, 0.11, 0.25, 1)
+
+[node name="Step2" type="StaticBody2D" parent="."]
+position = Vector2(1700, 405)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step2"]
+shape = SubResource("SmallPlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="Step2"]
+polygon = PackedVector2Array(-65, -15, 65, -15, 65, 15, -65, 15)
+color = Color(0.16, 0.12, 0.27, 1)
+
+[node name="EnergyFragment2" type="Area2D" parent="."]
+position = Vector2(1700, 345)
+script = ExtResource("3_energy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnergyFragment2"]
+shape = SubResource("FragmentShape")
+
+[node name="Crystal" type="Polygon2D" parent="EnergyFragment2"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.62, 0.82, 1, 1)
+
+[node name="Core" type="Polygon2D" parent="EnergyFragment2"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.96, 0.98, 1, 1)
+
+[node name="ShadowGate2" type="StaticBody2D" parent="."]
+position = Vector2(1910, 451)
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShadowGate2"]
+shape = SubResource("ShadowGateShape")
+
+[node name="Visual" type="Polygon2D" parent="ShadowGate2"]
+polygon = PackedVector2Array(-29, -59, 29, -59, 29, 59, -29, 59)
+color = Color(0.37, 0.16, 0.55, 0.62)
+
+[node name="LowObstacle2" type="StaticBody2D" parent="."]
+position = Vector2(2160, 425)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LowObstacle2"]
+shape = SubResource("LowObstacleShape")
+
+[node name="Visual" type="Polygon2D" parent="LowObstacle2"]
+polygon = PackedVector2Array(-90, -55, 90, -55, 90, 55, -90, 55)
+color = Color(0.18, 0.12, 0.29, 1)
+
+[node name="EdgeGlow" type="Polygon2D" parent="LowObstacle2"]
+polygon = PackedVector2Array(-90, 49, 90, 49, 90, 55, -90, 55)
+color = Color(0.64, 0.37, 0.95, 1)
+
+[node name="EnergyFragment3" type="Area2D" parent="."]
+position = Vector2(2290, 465)
+script = ExtResource("3_energy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnergyFragment3"]
+shape = SubResource("FragmentShape")
+
+[node name="Crystal" type="Polygon2D" parent="EnergyFragment3"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.62, 0.82, 1, 1)
+
+[node name="Core" type="Polygon2D" parent="EnergyFragment3"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.96, 0.98, 1, 1)
+
+[node name="ExitGate" type="Area2D" parent="."]
+position = Vector2(2470, 460)
+script = ExtResource("5_exit")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitGate"]
+shape = SubResource("ExitShape")
+
+[node name="Frame" type="Polygon2D" parent="ExitGate"]
+polygon = PackedVector2Array(-31, -53, 31, -53, 31, 53, -31, 53)
+color = Color(0.12, 0.30, 0.35, 1)
+
+[node name="Glow" type="Polygon2D" parent="ExitGate"]
+polygon = PackedVector2Array(-23, -45, 23, -45, 23, 45, -23, 45)
+color = Color(0.32, 0.95, 0.82, 0.85)
+
+[node name="ExitText" type="Label" parent="ExitGate"]
+offset_left = -38.0
+offset_top = -78.0
+offset_right = 40.0
+offset_bottom = -55.0
+theme_override_colors/font_color = Color(0.55, 1, 0.92, 1)
 theme_override_font_sizes/font_size = 14
 text = "EXIT"
 horizontal_alignment = 1
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="HUD"]
+offset_left = 28.0
+offset_top = 22.0
+offset_right = 370.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.82, 0.82, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "SHADOW RUN // LEVEL 01"
+
+[node name="Controls" type="Label" parent="HUD"]
+offset_left = 30.0
+offset_top = 57.0
+offset_right = 600.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.62, 0.64, 0.78, 1)
+theme_override_font_sizes/font_size = 15
+text = "← → move    SPACE jump    hold SHIFT become shadow"
+
+[node name="CheckpointMessage" type="Label" parent="HUD"]
+visible = false
+offset_left = 465.0
+offset_top = 100.0
+offset_right = 690.0
+offset_bottom = 132.0
+theme_override_colors/font_color = Color(0.52, 1, 0.88, 1)
+theme_override_font_sizes/font_size = 20
+text = "CHECKPOINT REACHED"
+horizontal_alignment = 1
+
+[node name="LevelComplete" type="Label" parent="HUD"]
+visible = false
+offset_left = 325.0
+offset_top = 235.0
+offset_right = 825.0
+offset_bottom = 330.0
+theme_override_colors/font_color = Color(0.65, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 34
+text = "LEVEL 01 COMPLETE\nTHE SHADOW REMEMBERS."
+horizontal_alignment = 1
+vertical_alignment = 1
