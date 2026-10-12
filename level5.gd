@@ -22,7 +22,7 @@ func collect_fragment() -> void:
 	update_counter()
 
 func update_counter() -> void:
-	counter.text = "CORE ENERGY %d / 3" % fragments
+	counter.text = "CORE %d / 3   ◆ %d" % [fragments, GameState.shadow_shards]
 
 func respawn_player(message: String = "CORE DEFENSE TRIGGERED.") -> void:
 	if respawning:
