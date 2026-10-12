@@ -40,7 +40,10 @@ func build_levels() -> void:
 		list.add_child(row)
 
 func _open_level(scene_path: String) -> void:
-	get_tree().change_scene_to_file(scene_path)
+	var number_text := scene_path.get_file().trim_prefix("level").trim_suffix(".tscn")
+	var number := int(number_text)
+	var names := {1: "ROOFTOP INITIATION", 2: "LIGHT GRID", 3: "RAIN DISTRICT", 4: "BLACKOUT TOWER", 5: "CORE RUN"}
+	ScreenTransition.change_scene(scene_path, "LEVEL %02d" % number, str(names.get(number, "SHADOW RUN")))
 
 func _back() -> void:
-	get_tree().change_scene_to_file("res://main_menu.tscn")
+	ScreenTransition.change_scene("res://main_menu.tscn")
