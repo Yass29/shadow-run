@@ -51,7 +51,8 @@ func set_shadow_mode(enabled: bool) -> void:
 		collision.shape.size = NORMAL_COLLISION_SIZE
 
 func animate_character(direction: float, delta: float) -> void:
-	var target_scale := SHADOW_VISUAL_SCALE if is_shadow else NORMAL_VISUAL_SCALE
+	var base_scale := SHADOW_VISUAL_SCALE if is_shadow else NORMAL_VISUAL_SCALE
+	var target_scale := Vector2(base_scale.x * facing, base_scale.y)
 	body.scale = body.scale.lerp(target_scale, min(delta * 13.0, 1.0))
 
 	if is_shadow:
@@ -77,4 +78,3 @@ func animate_character(direction: float, delta: float) -> void:
 	else:
 		body.rotation = lerpf(body.rotation, 0.0, min(delta * 10.0, 1.0))
 
-	body.scale.x = abs(body.scale.x) * facing
