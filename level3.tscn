@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
 [ext_resource type="Script" path="res://level3_exit.gd" id="7_exit"]
 [ext_resource type="Script" path="res://lightning_flash.gd" id="8_lightning"]
+[ext_resource type="Script" path="res://spike_hazard.gd" id="9_spike"]
+[ext_resource type="Script" path="res://shadow_switch.gd" id="10_switch"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -23,6 +25,15 @@ size = Vector2(210, 55)
 
 [sub_resource type="CircleShape2D" id="FragmentShape"]
 radius = 16.0
+
+[sub_resource type="RectangleShape2D" id="SpikeShape"]
+size = Vector2(150, 34)
+
+[sub_resource type="RectangleShape2D" id="SwitchShape"]
+size = Vector2(90, 70)
+
+[sub_resource type="RectangleShape2D" id="PuzzleGateShape"]
+size = Vector2(56, 145)
 
 [node name="Level3" type="Node2D"]
 script = ExtResource("4_level")
@@ -186,6 +197,50 @@ color = Color(0.45, 0.9, 1, 1)
 [node name="Core" type="Polygon2D" parent="Energy3"]
 polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
 color = Color(0.95, 1, 1, 1)
+
+[node name="SpikeTrap" type="Area2D" parent="."]
+position = Vector2(1325, 505)
+script = ExtResource("9_spike")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeTrap"]
+shape = SubResource("SpikeShape")
+
+[node name="Visual" type="Polygon2D" parent="SpikeTrap"]
+polygon = PackedVector2Array(-75, 17, -55, -17, -35, 17, -15, -17, 5, 17, 25, -17, 45, 17, 65, -17, 75, 17)
+color = Color(0.84, 0.32, 0.52, 1)
+
+[node name="StormGate" type="StaticBody2D" parent="."]
+position = Vector2(2260, 438)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StormGate"]
+shape = SubResource("PuzzleGateShape")
+
+[node name="Visual" type="Polygon2D" parent="StormGate"]
+polygon = PackedVector2Array(-28, -72, 28, -72, 28, 72, -28, 72)
+color = Color(0.18, 0.36, 0.62, 0.94)
+
+[node name="ShadowSwitch" type="Area2D" parent="."]
+position = Vector2(2035, 485)
+script = ExtResource("10_switch")
+target_path = NodePath("../StormGate")
+hold_time = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShadowSwitch"]
+shape = SubResource("SwitchShape")
+
+[node name="Base" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(-45, -12, 45, -12, 45, 12, -45, 12)
+color = Color(0.07, 0.13, 0.22, 1)
+
+[node name="Rune" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
+color = Color(0.55, 0.76, 1, 1)
+
+[node name="SwitchHint" type="Label" parent="."]
+position = Vector2(1940, 405)
+theme_override_colors/font_color = Color(0.62, 0.82, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Charge the storm rune in SHADOW form."
 
 [node name="Finish" type="Area2D" parent="."]
 position = Vector2(3020, 455)
