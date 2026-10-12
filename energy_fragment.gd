@@ -21,4 +21,5 @@ func _on_body_entered(body: Node) -> void:
 	var level := get_parent()
 	if level.has_method("collect_fragment"):
 		level.collect_fragment()
+	GameState.add_shards(1)
 	queue_free()
