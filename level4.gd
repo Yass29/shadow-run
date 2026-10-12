@@ -18,8 +18,10 @@ func _process(_delta: float) -> void:
 	elapsed_time += _delta
 	if player.position.x > 1750.0 and checkpoint.x < 1750.0:
 		checkpoint = Vector2(1780, 420)
+		AudioManager.play_sfx("checkpoint")
 	if player.position.x > 3050.0 and checkpoint.x < 3050.0:
 		checkpoint = Vector2(3070, 420)
+		AudioManager.play_sfx("checkpoint")
 	if player.position.y > 720.0:
 		respawn_player("MISSED THE ROOFTOP.")
 
@@ -35,6 +37,7 @@ func respawn_player(message: String = "SEQUENCE FAILED.") -> void:
 		return
 	respawning = true
 	deaths += 1
+	AudioManager.play_sfx("alert")
 	alert.text = message
 	alert.visible = true
 	player.position = checkpoint
