@@ -19,9 +19,11 @@ func _process(_delta: float) -> void:
 	if player.position.x > 1750.0 and checkpoint.x < 1750.0:
 		checkpoint = Vector2(1780, 420)
 		AudioManager.play_sfx("checkpoint")
+		FXManager.checkpoint_burst(checkpoint)
 	if player.position.x > 3050.0 and checkpoint.x < 3050.0:
 		checkpoint = Vector2(3070, 420)
 		AudioManager.play_sfx("checkpoint")
+		FXManager.checkpoint_burst(checkpoint)
 	if player.position.y > 720.0:
 		respawn_player("MISSED THE ROOFTOP.")
 
