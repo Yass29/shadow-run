@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://doxplx6nrjfq1"]
+[gd_scene load_steps=8 format=3 uid="uid://doxplx6nrjfq1"]
 
 [ext_resource type="Script" uid="uid://gnog5jweu2oj" path="res://player.gd" id="1_dopym"]
 [ext_resource type="Texture2D" uid="uid://df5ovurx35pcl" path="res://icon.svg" id="2_ootpb"]
@@ -12,6 +12,9 @@ size = Vector2(1150, 100)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_obstacle"]
 size = Vector2(180, 110)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(180, 36)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fragment"]
 radius = 16.0
@@ -108,7 +111,7 @@ text = "Too low? Become your shadow."
 position = Vector2(810, 430)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
-shape = SubResource("RectangleShape2D_obstacle")
+shape = SubResource("RectangleShape2D_platform")
 
 [node name="Visual" type="Polygon2D" parent="Platform"]
 polygon = PackedVector2Array(-90, -18, 90, -18, 90, 18, -90, 18)
