@@ -13,10 +13,10 @@ func show_victory(fragments: int, summary: Dictionary) -> void:
 	$Card/Actions/Replay.grab_focus()
 
 func _on_main_menu() -> void:
-	get_tree().change_scene_to_file("res://main_menu.tscn")
+	ScreenTransition.change_scene("res://main_menu.tscn")
 
 func _on_replay() -> void:
 	get_tree().reload_current_scene()
 
 func _on_next_level() -> void:
-	get_tree().change_scene_to_file("res://level2.tscn")
+	ScreenTransition.change_scene("res://level2.tscn", "LEVEL 02", "LIGHT GRID")
