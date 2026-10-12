@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://level3.gd" id="4_level"]
 [ext_resource type="Script" path="res://rain.gd" id="5_rain"]
 [ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
+[ext_resource type="Script" path="res://level3_exit.gd" id="7_exit"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -40,8 +41,10 @@ z_index = -20
 polygon = PackedVector2Array(0, 460, 120, 460, 120, 310, 230, 310, 230, 460, 390, 460, 390, 255, 520, 255, 520, 460, 700, 460, 700, 340, 820, 340, 820, 460, 1000, 460, 1000, 295, 1120, 295, 1120, 460, 1300, 460, 1300, 335, 1430, 335, 1430, 460, 1600, 460, 1600, 250, 1740, 250, 1740, 460, 1910, 460, 1910, 325, 2050, 325, 2050, 460, 2240, 460, 2240, 280, 2370, 280, 2370, 460, 2540, 460, 2540, 330, 2670, 330, 2670, 460, 2860, 460, 2860, 270, 3000, 270, 3000, 460, 3200, 460, 3200, 540, 0, 540)
 color = Color(0.055, 0.075, 0.12, 1)
 
-[node name="Rain" type="Node2D" parent="."]
-z_index = 20
+[node name="RainLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Rain" type="Node2D" parent="RainLayer"]
 script = ExtResource("5_rain")
 
 [node name="Player" type="CharacterBody2D" parent="."]
@@ -180,6 +183,7 @@ color = Color(0.95, 1, 1, 1)
 
 [node name="Finish" type="Area2D" parent="."]
 position = Vector2(3020, 455)
+script = ExtResource("7_exit")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Finish"]
 shape = SubResource("StormShape")
 [node name="Visual" type="Polygon2D" parent="Finish"]
@@ -225,4 +229,76 @@ offset_bottom = 154.0
 theme_override_colors/font_color = Color(0.55, 0.85, 1, 1)
 theme_override_font_sizes/font_size = 20
 text = "ELECTRIC RAIN"
+horizontal_alignment = 1
+
+[node name="FinalOverlay" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/FinalOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.02, 0.05, 0.9)
+
+[node name="Card" type="ColorRect" parent="HUD/FinalOverlay"]
+offset_left = 300.0
+offset_top = 145.0
+offset_right = 850.0
+offset_bottom = 505.0
+color = Color(0.045, 0.065, 0.105, 0.98)
+
+[node name="Accent" type="ColorRect" parent="HUD/FinalOverlay/Card"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 550.0
+offset_bottom = 5.0
+color = Color(0.35, 0.82, 1, 1)
+
+[node name="Title" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 62.0
+offset_right = 505.0
+offset_bottom = 112.0
+theme_override_colors/font_color = Color(0.78, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 34
+text = "RAIN DISTRICT CLEARED"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 122.0
+offset_right = 505.0
+offset_bottom = 165.0
+theme_override_colors/font_color = Color(0.58, 0.76, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "THE STORM COULDN'T FIND YOUR SHADOW."
+horizontal_alignment = 1
+
+[node name="Thanks" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 210.0
+offset_right = 505.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0.68, 0.72, 0.86, 1)
+theme_override_font_sizes/font_size = 16
+text = "Thanks for playing the Shadow Run prototype."
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 290.0
+offset_right = 505.0
+offset_bottom = 328.0
+theme_override_colors/font_color = Color(0.55, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "ENTER  main menu     R  replay"
 horizontal_alignment = 1
