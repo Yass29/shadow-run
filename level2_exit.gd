@@ -10,7 +10,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("ui_accept"):
-		get_tree().change_scene_to_file("res://level3.tscn")
+		ScreenTransition.change_scene("res://level3.tscn", "LEVEL 03", "RAIN DISTRICT")
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
 
@@ -26,6 +26,7 @@ func _on_body_entered(body: Node) -> void:
 	GameState.submit_grade(2, str(summary["grade"]))
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
+	AudioManager.play_sfx("victory")
 
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
