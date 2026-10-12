@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
 [ext_resource type="Script" path="res://level4_exit.gd" id="7_exit"]
 [ext_resource type="Script" path="res://moving_platform.gd" id="8_move"]
+[ext_resource type="Script" path="res://spike_hazard.gd" id="9_spike"]
+[ext_resource type="Script" path="res://shadow_switch.gd" id="10_switch"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -35,6 +37,15 @@ radius = 16.0
 
 [sub_resource type="RectangleShape2D" id="ExitShape"]
 size = Vector2(64, 104)
+
+[sub_resource type="RectangleShape2D" id="SpikeShape"]
+size = Vector2(170, 34)
+
+[sub_resource type="RectangleShape2D" id="SwitchShape"]
+size = Vector2(90, 70)
+
+[sub_resource type="RectangleShape2D" id="PuzzleGateShape"]
+size = Vector2(56, 155)
 
 [node name="Level4" type="Node2D"]
 script = ExtResource("4_level")
@@ -219,6 +230,50 @@ color = Color(0.66, 0.82, 1, 1)
 [node name="Core" type="Polygon2D" parent="Energy3"]
 polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
 color = Color(0.98, 1, 1, 1)
+
+[node name="SpikeTrap" type="Area2D" parent="."]
+position = Vector2(1460, 505)
+script = ExtResource("9_spike")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeTrap"]
+shape = SubResource("SpikeShape")
+
+[node name="Visual" type="Polygon2D" parent="SpikeTrap"]
+polygon = PackedVector2Array(-85, 17, -65, -17, -45, 17, -25, -17, -5, 17, 15, -17, 35, 17, 55, -17, 75, 17, 85, -17)
+color = Color(0.92, 0.24, 0.44, 1)
+
+[node name="TowerLock" type="StaticBody2D" parent="."]
+position = Vector2(3160, 433)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TowerLock"]
+shape = SubResource("PuzzleGateShape")
+
+[node name="Visual" type="Polygon2D" parent="TowerLock"]
+polygon = PackedVector2Array(-28, -77, 28, -77, 28, 77, -28, 77)
+color = Color(0.50, 0.18, 0.68, 0.96)
+
+[node name="ShadowSwitch" type="Area2D" parent="."]
+position = Vector2(2870, 485)
+script = ExtResource("10_switch")
+target_path = NodePath("../TowerLock")
+hold_time = 1.1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShadowSwitch"]
+shape = SubResource("SwitchShape")
+
+[node name="Base" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(-45, -12, 45, -12, 45, 12, -45, 12)
+color = Color(0.10, 0.06, 0.18, 1)
+
+[node name="Rune" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
+color = Color(0.82, 0.48, 1, 1)
+
+[node name="SwitchHint" type="Label" parent="."]
+position = Vector2(2740, 400)
+theme_override_colors/font_color = Color(0.82, 0.70, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Stay in SHADOW on the rune to unlock the tower."
 
 [node name="Exit" type="Area2D" parent="."]
 position = Vector2(3370, 458)
