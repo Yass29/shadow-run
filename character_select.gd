@@ -61,7 +61,7 @@ func make_card(skin_id: String) -> Control:
 	button.position = Vector2(18, 238)
 	button.size = Vector2(199, 46)
 	button.name = "Choose"
-	button.pressed.connect(func(): choose(skin_id))
+	button.pressed.connect(choose.bind(skin_id))
 	card.add_child(button)
 
 	if GameState.selected_skin == skin_id:
