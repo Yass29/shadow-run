@@ -27,5 +27,5 @@ func _on_body_entered(body: Node) -> void:
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
-	hud.get_node("Complete").text = "BLACKOUT TOWER CLEARED\nGRADE %s   •   %.1fs   •   %d deaths\nENTER  FINAL CORE RUN     R  replay" % [summary["grade"], float(summary["time"]), int(summary["deaths"])]
-	hud.get_node("Complete").visible = true
+	hud.get_node("ResultOverlay/Card/Stats").text = "GRADE %s   •   %.1fs   •   %d deaths   •   ◆ %d" % [summary["grade"], float(summary["time"]), int(summary["deaths"]), GameState.shadow_shards]
+	hud.get_node("ResultOverlay").visible = true
