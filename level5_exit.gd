@@ -20,9 +20,12 @@ func _on_body_entered(body: Node) -> void:
 	GameState.unlock_level(5)
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
-	var hud := get_parent().get_node("HUD")
+	var level := get_parent()
+	var hud := level.get_node("HUD")
+	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_grade(5, str(summary["grade"]))
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
-	hud.get_node("Finale/Card/Text").text = "5 levels complete. ◆ %d shards banked. More districts coming." % GameState.shadow_shards
+	hud.get_node("Finale/Card/Text").text = "GRADE %s   •   %.1fs   •   %d deaths   •   ◆ %d shards" % [summary["grade"], float(summary["time"]), int(summary["deaths"]), GameState.shadow_shards]
 	hud.get_node("Finale").visible = true
