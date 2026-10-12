@@ -19,6 +19,7 @@ func _process(_delta: float) -> void:
 	elapsed_time += _delta
 	if player.position.x > 1250.0 and checkpoint.x < 1250.0:
 		checkpoint = Vector2(1270, 420)
+		AudioManager.play_sfx("checkpoint")
 		checkpoint_message.visible = true
 		await get_tree().create_timer(1.2).timeout
 		checkpoint_message.visible = false
@@ -39,6 +40,7 @@ func respawn_player(message: String = "Detected.") -> void:
 
 	respawning = true
 	deaths += 1
+	AudioManager.play_sfx("alert")
 	alert_message.text = message
 	alert_message.visible = true
 	player.position = checkpoint
