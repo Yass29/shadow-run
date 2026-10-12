@@ -23,10 +23,13 @@ func build_levels() -> void:
 		row.custom_minimum_size = Vector2(760, 64)
 		var unlocked := int(data["number"]) <= GameState.max_unlocked_level
 		row.disabled = not unlocked
-		row.text = "LEVEL %02d   //   %s%s" % [
+		var grade := str(GameState.best_grades.get(str(data["number"]), ""))
+		var grade_text := "   •   BEST %s" % grade if grade != "" else ""
+		row.text = "LEVEL %02d   //   %s%s%s" % [
 			int(data["number"]),
 			str(data["name"]),
-			"" if unlocked else "   [LOCKED]"
+			"" if unlocked else "   [LOCKED]",
+			grade_text
 		]
 		row.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		row.add_theme_font_size_override("font_size", 18)
