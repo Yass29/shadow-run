@@ -67,7 +67,7 @@ func animate_character(direction: float, delta: float) -> void:
 	floor_shadow.scale = floor_shadow.scale.lerp(Vector2.ONE, min(delta * 10.0, 1.0))
 	floor_shadow.modulate.a = lerpf(floor_shadow.modulate.a, 0.35, min(delta * 10.0, 1.0))
 
-	var moving: bool = abs(direction) > 0.01 and is_on_floor()()
+	var moving: bool = abs(direction) > 0.01 and is_on_floor()
 	var bob := sin(anim_time * 12.0) * 2.2 if moving else sin(anim_time * 3.0) * 1.0
 	body.position.y = lerpf(body.position.y, bob, min(delta * 14.0, 1.0))
 
