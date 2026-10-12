@@ -24,7 +24,7 @@ size = Vector2(3200, 100)
 size = Vector2(180, 34)
 
 [sub_resource type="RectangleShape2D" id="StormShape"]
-size = Vector2(210, 55)
+size = Vector2(150, 46)
 
 [sub_resource type="CircleShape2D" id="FragmentShape"]
 radius = 16.0
@@ -255,10 +255,10 @@ theme_override_font_sizes/font_size = 13
 text = "Charge the storm rune in SHADOW form."
 
 [node name="StormDrone" type="Area2D" parent="."]
-position = Vector2(1710, 205)
+position = Vector2(1550, 175)
 script = ExtResource("11_drone")
-patrol_distance = 230.0
-patrol_speed = 1.05
+patrol_distance = 150.0
+patrol_speed = 0.9
 vertical_bob = 18.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StormDrone"]
@@ -281,10 +281,10 @@ color = Color(0.12, 0.18, 0.30, 1)
 polygon = PackedVector2Array(-12, -5, 12, -5, 16, 0, 12, 5, -12, 5, -16, 0)
 color = Color(1, 0.26, 0.32, 1)
 [node name="Hunter" type="Area2D" parent="."]
-position = Vector2(2520, 370)
+position = Vector2(2735, 355)
 script = ExtResource("12_hunter")
-activation_distance = 580.0
-chase_speed = 185.0
+activation_distance = 420.0
+chase_speed = 145.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hunter"]
 shape = SubResource("HunterShape")
@@ -301,7 +301,7 @@ color = Color(1, 0.72, 0.78, 1)
 position = Vector2(2350, 300)
 theme_override_colors/font_color = Color(1, 0.56, 0.66, 1)
 theme_override_font_sizes/font_size = 13
-text = "HUNTER — break sight by becoming shadow."
+text = "HUNTER — use SHADOW, then release before blue storm."
 
 [node name="SecretCache" type="Area2D" parent="."]
 position = Vector2(1180, 300)
