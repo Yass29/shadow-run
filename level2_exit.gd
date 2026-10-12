@@ -30,7 +30,5 @@ func _on_body_entered(body: Node) -> void:
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
-	hud.get_node("DemoComplete").text = "LEVEL 02 COMPLETE\nGRADE %s   •   %.1fs   •   %d deaths" % [summary["grade"], float(summary["time"]), int(summary["deaths"])]
-	hud.get_node("DemoHint").text = "ENTER  Rain District     R  replay     ◆ %d total" % GameState.shadow_shards
-	hud.get_node("DemoComplete").visible = true
-	hud.get_node("DemoHint").visible = true
+	hud.get_node("ResultOverlay/Card/Stats").text = "GRADE %s   •   %.1fs   •   %d deaths   •   ◆ %d" % [summary["grade"], float(summary["time"]), int(summary["deaths"]), GameState.shadow_shards]
+	hud.get_node("ResultOverlay").visible = true
