@@ -10,6 +10,9 @@ const SHADOW_VISUAL_SCALE := Vector2(1.25, 0.60)
 var is_shadow := false
 var facing := 1.0
 var anim_time := 0.0
+@export var shadow_dash_enabled := false
+var dash_cooldown := 0.0
+var dash_latched := false
 
 @onready var body: Node2D = $Body
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -24,6 +27,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	anim_time += delta
+	dash_cooldown = max(dash_cooldown - delta, 0.0)
 
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -39,8 +43,24 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED * 5.0 * delta)
 
 	set_shadow_mode(Input.is_key_pressed(KEY_SHIFT))
+	handle_shadow_dash()
 	move_and_slide()
 	animate_character(direction, delta)
+
+func handle_shadow_dash() -> void:
+	var dash_pressed := Input.is_key_pressed(KEY_E)
+
+	if not dash_pressed:
+		dash_latched = false
+		return
+
+	if dash_latched or not shadow_dash_enabled or not is_shadow or dash_cooldown > 0.0:
+		return
+
+	dash_latched = true
+	dash_cooldown = 0.65
+	velocity.x = facing * 720.0
+	velocity.y = 0.0
 
 func set_shadow_mode(enabled: bool) -> void:
 	if is_shadow == enabled:
