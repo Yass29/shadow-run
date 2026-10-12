@@ -24,6 +24,7 @@ func _ready() -> void:
 	body.scale = NORMAL_VISUAL_SCALE
 	shadow_aura.modulate.a = 0.0
 	collision_mask = 3
+	apply_selected_skin()
 
 func _physics_process(delta: float) -> void:
 	anim_time += delta
@@ -108,3 +109,25 @@ func animate_character(direction: float, delta: float) -> void:
 	else:
 		body.rotation = lerpf(body.rotation, 0.0, min(delta * 10.0, 1.0))
 
+
+func apply_selected_skin() -> void:
+	if not Engine.has_singleton("GameState") and not has_node("/root/GameState"):
+		return
+
+	var state = get_node("/root/GameState")
+	if not state.SKINS.has(state.selected_skin):
+		return
+
+	var skin = state.SKINS[state.selected_skin]
+	if body.has_node("Torso"):
+		body.get_node("Torso").color = skin["torso"]
+	if body.has_node("Cape"):
+		body.get_node("Cape").color = skin["cape"]
+	if body.has_node("Head"):
+		body.get_node("Head").color = skin["head"]
+	if body.has_node("Eyes"):
+		body.get_node("Eyes").color = skin["eyes"]
+	if body.has_node("Scarf"):
+		body.get_node("Scarf").color = skin["scarf"]
+	if body.has_node("Core"):
+		body.get_node("Core").color = skin["core"]
