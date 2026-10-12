@@ -98,7 +98,7 @@ color = Color(0.28, 0.62, 0.95, 1)
 position = Vector2(220, 335)
 theme_override_colors/font_color = Color(0.62, 0.82, 1, 1)
 theme_override_font_sizes/font_size = 15
-text = "RAIN DISTRICT — electric puddles ignore your shadow form"
+text = "RAIN DISTRICT — blue storm overloads SHADOW form. Switch back to normal."
 
 [node name="Storm1" type="Area2D" parent="."]
 position = Vector2(690, 485)

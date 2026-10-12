@@ -22,7 +22,7 @@ func collect_fragment() -> void:
 	update_counter()
 
 func update_counter() -> void:
-	counter.text = "ENERGY %d / 3" % fragments
+	counter.text = "ENERGY %d / 3   ◆ %d" % [fragments, GameState.shadow_shards]
 
 func respawn_player(message: String = "SEQUENCE FAILED.") -> void:
 	if respawning:

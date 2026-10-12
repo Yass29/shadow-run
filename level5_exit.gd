@@ -1,7 +1,10 @@
 extends Area2D
+
 var completed := false
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not completed:
 		return
@@ -9,14 +12,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().change_scene_to_file("res://main_menu.tscn")
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
+
 func _on_body_entered(body: Node) -> void:
 	if completed or not body is CharacterBody2D:
 		return
 	completed = true
+	GameState.unlock_level(5)
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
 	var hud := get_parent().get_node("HUD")
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
+	hud.get_node("Finale/Card/Text").text = "5 levels complete. ◆ %d shards banked. More districts coming." % GameState.shadow_shards
 	hud.get_node("Finale").visible = true

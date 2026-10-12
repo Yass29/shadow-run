@@ -19,6 +19,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	completed = true
+	GameState.unlock_level(3)
 	var level := get_parent()
 	var hud := level.get_node("HUD")
 	body.velocity = Vector2.ZERO
@@ -27,5 +28,7 @@ func _on_body_entered(body: Node) -> void:
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
+	hud.get_node("DemoComplete").text = "LEVEL 02 COMPLETE\nSHADOW DASH MASTERED."
+	hud.get_node("DemoHint").text = "ENTER  Rain District     R  replay     ◆ %d total" % GameState.shadow_shards
 	hud.get_node("DemoComplete").visible = true
 	hud.get_node("DemoHint").visible = true

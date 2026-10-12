@@ -27,7 +27,7 @@ func collect_fragment() -> void:
 	update_fragment_counter()
 
 func update_fragment_counter() -> void:
-	fragment_counter.text = "ENERGY %d / 3" % fragments
+	fragment_counter.text = "ENERGY %d / 3   ◆ %d" % [fragments, GameState.shadow_shards]
 
 func respawn_player(message: String = "Detected.") -> void:
 	if respawning:

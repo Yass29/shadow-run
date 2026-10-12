@@ -6,7 +6,8 @@ func _ready() -> void:
 	$Card/Actions/NextLevel.pressed.connect(_on_next_level)
 
 func show_victory(fragments: int) -> void:
-	$Card/Energy.text = "ENERGY RECOVERED   %d / 3" % fragments
+	GameState.unlock_level(2)
+	$Card/Energy.text = "ENERGY RECOVERED   %d / 3   •   TOTAL ◆ %d" % [fragments, GameState.shadow_shards]
 	$Card/Perfect.visible = fragments >= 3
 	visible = true
 	$Card/Actions/Replay.grab_focus()

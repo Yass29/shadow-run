@@ -18,6 +18,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	completed = true
+	GameState.unlock_level(4)
 	var level := get_parent()
 	var hud := level.get_node("HUD")
 	body.velocity = Vector2.ZERO
@@ -25,4 +26,5 @@ func _on_body_entered(body: Node) -> void:
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
+	hud.get_node("FinalOverlay/Card/Thanks").text = "Blackout Tower unlocked. Total shards: ◆ %d" % GameState.shadow_shards
 	hud.get_node("FinalOverlay").visible = true

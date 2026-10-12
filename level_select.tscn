@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://level_select.gd" id="1"]
+
+[node name="LevelSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.018, 0.022, 0.06, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 90.0
+offset_top = 62.0
+offset_right = 760.0
+offset_bottom = 116.0
+theme_override_colors/font_color = Color(0.82, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "LEVEL SELECT"
+
+[node name="Subtitle" type="Label" parent="."]
+offset_left = 94.0
+offset_top = 120.0
+offset_right = 920.0
+offset_bottom = 152.0
+theme_override_colors/font_color = Color(0.64, 0.58, 0.92, 1)
+theme_override_font_sizes/font_size = 15
+text = "Complete a district to unlock the next one. Progress is saved."
+
+[node name="Panel" type="ColorRect" parent="."]
+offset_left = 180.0
+offset_top = 190.0
+offset_right = 970.0
+offset_bottom = 535.0
+color = Color(0.045, 0.05, 0.105, 1)
+
+[node name="List" type="VBoxContainer" parent="Panel"]
+offset_left = 15.0
+offset_top = 12.0
+offset_right = 775.0
+offset_bottom = 333.0
+theme_override_constants/separation = 6
+
+[node name="Back" type="Button" parent="."]
+offset_left = 450.0
+offset_top = 565.0
+offset_right = 700.0
+offset_bottom = 615.0
+theme_override_font_sizes/font_size = 16
+text = "BACK TO MENU"
