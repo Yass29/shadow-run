@@ -33,8 +33,11 @@ func build_levels() -> void:
 		if unlocked:
 			row.add_theme_color_override("font_color", data["accent"])
 			var scene_path := str(data["scene"])
-			row.pressed.connect(func(): get_tree().change_scene_to_file(scene_path))
+			row.pressed.connect(_open_level.bind(scene_path))
 		list.add_child(row)
+
+func _open_level(scene_path: String) -> void:
+	get_tree().change_scene_to_file(scene_path)
 
 func _back() -> void:
 	get_tree().change_scene_to_file("res://main_menu.tscn")
