@@ -9,7 +9,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not completed:
 		return
 	if event.is_action_pressed("ui_accept"):
-		get_tree().change_scene_to_file("res://main_menu.tscn")
+		get_tree().change_scene_to_file("res://level4.tscn")
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
 

@@ -99,7 +99,7 @@ offset_right = 1110.0
 offset_bottom = 620.0
 theme_override_colors/font_color = Color(0.38, 0.4, 0.55, 1)
 theme_override_font_sizes/font_size = 12
-text = "PROTOTYPE 0.2  •  3 LEVELS"
+text = "PROTOTYPE 0.3  •  5 LEVELS"
 horizontal_alignment = 2
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_pressed"]

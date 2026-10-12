@@ -1,0 +1,285 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
+[ext_resource type="Script" path="res://energy_fragment.gd" id="3_energy"]
+[ext_resource type="Script" path="res://level4.gd" id="4_level"]
+[ext_resource type="Script" path="res://light_beam.gd" id="5_beam"]
+[ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
+[ext_resource type="Script" path="res://level4_exit.gd" id="7_exit"]
+
+[sub_resource type="RectangleShape2D" id="PlayerShape"]
+size = Vector2(40, 68)
+
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(3550, 100)
+
+[sub_resource type="RectangleShape2D" id="PlatformShape"]
+size = Vector2(180, 34)
+
+[sub_resource type="RectangleShape2D" id="SmallPlatform"]
+size = Vector2(120, 28)
+
+[sub_resource type="RectangleShape2D" id="BeamShape"]
+size = Vector2(48, 170)
+
+[sub_resource type="RectangleShape2D" id="StormShape"]
+size = Vector2(190, 54)
+
+[sub_resource type="RectangleShape2D" id="GateShape"]
+size = Vector2(54, 120)
+
+[sub_resource type="CircleShape2D" id="FragmentShape"]
+radius = 16.0
+
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(64, 104)
+
+[node name="Level4" type="Node2D"]
+script = ExtResource("4_level")
+
+[node name="Background" type="Polygon2D" parent="."]
+z_index = -30
+polygon = PackedVector2Array(0, 0, 3550, 0, 3550, 647, 0, 647)
+color = Color(0.012, 0.015, 0.04, 1)
+
+[node name="Band" type="Polygon2D" parent="."]
+z_index = -28
+polygon = PackedVector2Array(0, 175, 3550, 175, 3550, 360, 0, 360)
+color = Color(0.04, 0.025, 0.075, 0.7)
+
+[node name="Skyline" type="Polygon2D" parent="."]
+z_index = -20
+polygon = PackedVector2Array(0, 465, 150, 465, 150, 300, 265, 300, 265, 465, 430, 465, 430, 245, 560, 245, 560, 465, 720, 465, 720, 320, 830, 320, 830, 465, 1000, 465, 1000, 275, 1120, 275, 1120, 465, 1290, 465, 1290, 335, 1410, 335, 1410, 465, 1600, 465, 1600, 240, 1730, 240, 1730, 465, 1910, 465, 1910, 325, 2030, 325, 2030, 465, 2200, 465, 2200, 270, 2330, 270, 2330, 465, 2500, 465, 2500, 345, 2620, 345, 2620, 465, 2790, 465, 2790, 260, 2920, 260, 2920, 465, 3090, 465, 3090, 330, 3220, 330, 3220, 465, 3400, 465, 3400, 285, 3500, 285, 3500, 540, 0, 540)
+color = Color(0.06, 0.045, 0.11, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(140, 420)
+script = ExtResource("1_player")
+shadow_dash_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="FloorShadow" type="Polygon2D" parent="Player"]
+z_index = -1
+position = Vector2(0, 35)
+polygon = PackedVector2Array(-24, -5, 24, -5, 34, 0, 24, 5, -24, 5, -34, 0)
+color = Color(0.02, 0.015, 0.05, 1)
+modulate = Color(1, 1, 1, 0.35)
+
+[node name="ShadowAura" type="Polygon2D" parent="Player"]
+z_index = -2
+position = Vector2(0, 8)
+polygon = PackedVector2Array(0, -42, 30, -30, 48, 0, 30, 30, 0, 42, -30, 30, -48, 0, -30, -30)
+color = Color(0.72, 0.42, 1, 1)
+modulate = Color(1, 1, 1, 0)
+
+[node name="Body" parent="Player" instance=ExtResource("2_hero")]
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(250, -40)
+position_smoothing_enabled = true
+position_smoothing_speed = 7.0
+limit_left = 0
+limit_top = 0
+limit_right = 3550
+limit_bottom = 647
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(1775, 560)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("GroundShape")
+[node name="Visual" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-1775, -50, 1775, -50, 1775, 50, -1775, 50)
+color = Color(0.07, 0.04, 0.12, 1)
+[node name="TopGlow" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-1775, -50, 1775, -50, 1775, -44, -1775, -44)
+color = Color(0.62, 0.32, 0.92, 1)
+
+[node name="Intro" type="Label" parent="."]
+position = Vector2(215, 340)
+theme_override_colors/font_color = Color(0.82, 0.7, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "BLACKOUT TOWER — light hurts normal form, storm fields hurt shadow form"
+
+[node name="Beam1" type="Area2D" parent="."]
+position = Vector2(650, 420)
+script = ExtResource("5_beam")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Beam1"]
+shape = SubResource("BeamShape")
+[node name="Visual" type="Polygon2D" parent="Beam1"]
+polygon = PackedVector2Array(-24, -85, 24, -85, 24, 85, -24, 85)
+color = Color(0.96, 0.22, 0.34, 1)
+
+[node name="Gate1" type="StaticBody2D" parent="."]
+position = Vector2(900, 450)
+collision_layer = 2
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gate1"]
+shape = SubResource("GateShape")
+[node name="Visual" type="Polygon2D" parent="Gate1"]
+polygon = PackedVector2Array(-27, -60, 27, -60, 27, 60, -27, 60)
+color = Color(0.42, 0.18, 0.58, 0.68)
+
+[node name="Storm1" type="Area2D" parent="."]
+position = Vector2(1120, 485)
+script = ExtResource("6_storm")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm1"]
+shape = SubResource("StormShape")
+[node name="Visual" type="Polygon2D" parent="Storm1"]
+polygon = PackedVector2Array(-95, -27, 95, -27, 95, 27, -95, 27)
+color = Color(0.18, 0.58, 0.98, 0.78)
+
+[node name="Energy1" type="Area2D" parent="."]
+position = Vector2(1320, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy1"]
+shape = SubResource("FragmentShape")
+[node name="Crystal" type="Polygon2D" parent="Energy1"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.66, 0.82, 1, 1)
+[node name="Core" type="Polygon2D" parent="Energy1"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.98, 1, 1, 1)
+
+[node name="Platform1" type="StaticBody2D" parent="."]
+position = Vector2(1510, 410)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="Platform1"]
+polygon = PackedVector2Array(-90, -17, 90, -17, 90, 17, -90, 17)
+color = Color(0.14, 0.09, 0.23, 1)
+
+[node name="Beam2" type="Area2D" parent="."]
+position = Vector2(1770, 420)
+cycle_speed = 3.2
+script = ExtResource("5_beam")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Beam2"]
+shape = SubResource("BeamShape")
+[node name="Visual" type="Polygon2D" parent="Beam2"]
+polygon = PackedVector2Array(-24, -85, 24, -85, 24, 85, -24, 85)
+color = Color(0.96, 0.22, 0.34, 1)
+
+[node name="Storm2" type="Area2D" parent="."]
+position = Vector2(1980, 485)
+script = ExtResource("6_storm")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm2"]
+shape = SubResource("StormShape")
+[node name="Visual" type="Polygon2D" parent="Storm2"]
+polygon = PackedVector2Array(-95, -27, 95, -27, 95, 27, -95, 27)
+color = Color(0.18, 0.58, 0.98, 0.78)
+
+[node name="Energy2" type="Area2D" parent="."]
+position = Vector2(2150, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy2"]
+shape = SubResource("FragmentShape")
+[node name="Crystal" type="Polygon2D" parent="Energy2"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.66, 0.82, 1, 1)
+[node name="Core" type="Polygon2D" parent="Energy2"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.98, 1, 1, 1)
+
+[node name="Step1" type="StaticBody2D" parent="."]
+position = Vector2(2380, 455)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Step1"]
+shape = SubResource("SmallPlatform")
+[node name="Visual" type="Polygon2D" parent="Step1"]
+polygon = PackedVector2Array(-60, -14, 60, -14, 60, 14, -60, 14)
+color = Color(0.15, 0.10, 0.25, 1)
+
+[node name="Gate2" type="StaticBody2D" parent="."]
+position = Vector2(2590, 450)
+collision_layer = 2
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gate2"]
+shape = SubResource("GateShape")
+[node name="Visual" type="Polygon2D" parent="Gate2"]
+polygon = PackedVector2Array(-27, -60, 27, -60, 27, 60, -27, 60)
+color = Color(0.42, 0.18, 0.58, 0.68)
+
+[node name="Storm3" type="Area2D" parent="."]
+position = Vector2(2800, 485)
+script = ExtResource("6_storm")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm3"]
+shape = SubResource("StormShape")
+[node name="Visual" type="Polygon2D" parent="Storm3"]
+polygon = PackedVector2Array(-95, -27, 95, -27, 95, 27, -95, 27)
+color = Color(0.18, 0.58, 0.98, 0.78)
+
+[node name="Energy3" type="Area2D" parent="."]
+position = Vector2(3000, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy3"]
+shape = SubResource("FragmentShape")
+[node name="Crystal" type="Polygon2D" parent="Energy3"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.66, 0.82, 1, 1)
+[node name="Core" type="Polygon2D" parent="Energy3"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.98, 1, 1, 1)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(3370, 458)
+script = ExtResource("7_exit")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit"]
+shape = SubResource("ExitShape")
+[node name="Frame" type="Polygon2D" parent="Exit"]
+polygon = PackedVector2Array(-36, -56, 36, -56, 36, 56, -36, 56)
+color = Color(0.15, 0.32, 0.36, 1)
+[node name="Glow" type="Polygon2D" parent="Exit"]
+polygon = PackedVector2Array(-27, -47, 27, -47, 27, 47, -27, 47)
+color = Color(0.35, 0.98, 0.86, 0.9)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="HUD"]
+offset_left = 28.0
+offset_top = 22.0
+offset_right = 540.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.88, 0.82, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "SHADOW RUN // LEVEL 04 — BLACKOUT TOWER"
+
+[node name="Controls" type="Label" parent="HUD"]
+offset_left = 30.0
+offset_top = 57.0
+offset_right = 760.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.66, 0.62, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "SWITCH FORMS — red light hurts normal, blue storm hurts shadow"
+
+[node name="FragmentCounter" type="Label" parent="HUD"]
+offset_left = 930.0
+offset_top = 24.0
+offset_right = 1115.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.68, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "ENERGY 0 / 3"
+horizontal_alignment = 2
+
+[node name="AlertMessage" type="Label" parent="HUD"]
+visible = false
+offset_left = 250.0
+offset_top = 118.0
+offset_right = 900.0
+offset_bottom = 154.0
+theme_override_colors/font_color = Color(1, 0.52, 0.62, 1)
+theme_override_font_sizes/font_size = 20
+text = "SEQUENCE FAILED"
+horizontal_alignment = 1
+
+[node name="Complete" type="Label" parent="HUD"]
+visible = false
+offset_left = 260.0
+offset_top = 220.0
+offset_right = 890.0
+offset_bottom = 355.0
+theme_override_colors/font_color = Color(0.65, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 32
+text = "BLACKOUT TOWER CLEARED\nENTER  FINAL CORE RUN     R  replay"
+horizontal_alignment = 1
+vertical_alignment = 1
