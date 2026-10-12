@@ -286,17 +286,6 @@ theme_override_colors/font_color = Color(1, 0.65, 0.84, 1)
 theme_override_font_sizes/font_size = 13
 text = "Use the SHADOW RIFT to reach the upper core route."
 
-[node name="SpikeTrapA" type="Area2D" parent="."]
-position = Vector2(1540, 505)
-script = ExtResource("9_spike")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeTrapA"]
-shape = SubResource("SpikeShape")
-
-[node name="Visual" type="Polygon2D" parent="SpikeTrapA"]
-polygon = PackedVector2Array(-90, 17, -70, -17, -50, 17, -30, -17, -10, 17, 10, -17, 30, 17, 50, -17, 70, 17, 90, -17)
-color = Color(1, 0.28, 0.52, 1)
-
 [node name="CoreLock" type="StaticBody2D" parent="."]
 position = Vector2(3340, 430)
 
