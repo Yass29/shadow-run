@@ -18,4 +18,4 @@ func _on_replay() -> void:
 	get_tree().reload_current_scene()
 
 func _on_next_level() -> void:
-	$Card/ComingSoon.visible = true
+	get_tree().change_scene_to_file("res://level2.tscn")
