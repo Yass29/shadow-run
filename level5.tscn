@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
 [ext_resource type="Script" path="res://level5_exit.gd" id="7_exit"]
 [ext_resource type="Script" path="res://moving_platform.gd" id="8_move"]
+[ext_resource type="Script" path="res://spike_hazard.gd" id="9_spike"]
+[ext_resource type="Script" path="res://shadow_switch.gd" id="10_switch"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -35,6 +37,15 @@ radius = 16.0
 
 [sub_resource type="RectangleShape2D" id="ExitShape"]
 size = Vector2(68, 108)
+
+[sub_resource type="RectangleShape2D" id="SpikeShape"]
+size = Vector2(180, 34)
+
+[sub_resource type="RectangleShape2D" id="SwitchShape"]
+size = Vector2(90, 70)
+
+[sub_resource type="RectangleShape2D" id="PuzzleGateShape"]
+size = Vector2(58, 160)
 
 [node name="Level5" type="Node2D"]
 script = ExtResource("4_level")
@@ -216,6 +227,44 @@ shape = SubResource("GateShape")
 [node name="Visual" type="Polygon2D" parent="Gate2"]
 polygon = PackedVector2Array(-27, -60, 27, -60, 27, 60, -27, 60)
 color = Color(0.48, 0.14, 0.52, 0.75)
+
+[node name="SpikeTrapA" type="Area2D" parent="."]
+position = Vector2(1540, 505)
+script = ExtResource("9_spike")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeTrapA"]
+shape = SubResource("SpikeShape")
+
+[node name="Visual" type="Polygon2D" parent="SpikeTrapA"]
+polygon = PackedVector2Array(-90, 17, -70, -17, -50, 17, -30, -17, -10, 17, 10, -17, 30, 17, 50, -17, 70, 17, 90, -17)
+color = Color(1, 0.28, 0.52, 1)
+
+[node name="CoreLock" type="StaticBody2D" parent="."]
+position = Vector2(3340, 430)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CoreLock"]
+shape = SubResource("PuzzleGateShape")
+
+[node name="Visual" type="Polygon2D" parent="CoreLock"]
+polygon = PackedVector2Array(-29, -80, 29, -80, 29, 80, -29, 80)
+color = Color(0.55, 0.12, 0.42, 0.98)
+
+[node name="ShadowSwitch" type="Area2D" parent="."]
+position = Vector2(3000, 485)
+script = ExtResource("10_switch")
+target_path = NodePath("../CoreLock")
+hold_time = 1.25
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShadowSwitch"]
+shape = SubResource("SwitchShape")
+
+[node name="Base" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(-45, -12, 45, -12, 45, 12, -45, 12)
+color = Color(0.14, 0.04, 0.12, 1)
+
+[node name="Rune" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
+color = Color(1, 0.34, 0.72, 1)
 
 [node name="Energy3" type="Area2D" parent="."]
 position = Vector2(3400, 445)

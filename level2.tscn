@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://light_beam.gd" id="5_beam"]
 [ext_resource type="Script" path="res://level2_exit.gd" id="6_exit"]
 [ext_resource type="Script" path="res://moving_platform.gd" id="8_move"]
+[ext_resource type="Script" path="res://spike_hazard.gd" id="9_spike"]
+[ext_resource type="Script" path="res://shadow_switch.gd" id="10_switch"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -25,6 +27,15 @@ radius = 16.0
 
 [sub_resource type="RectangleShape2D" id="ExitShape"]
 size = Vector2(60, 100)
+
+[sub_resource type="RectangleShape2D" id="SpikeShape"]
+size = Vector2(150, 34)
+
+[sub_resource type="RectangleShape2D" id="SwitchShape"]
+size = Vector2(90, 70)
+
+[sub_resource type="RectangleShape2D" id="PuzzleGateShape"]
+size = Vector2(56, 145)
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("4_level")
@@ -252,6 +263,61 @@ color = Color(0.12, 0.28, 0.40, 1)
 [node name="Glow" type="Polygon2D" parent="MovingPlatformB"]
 polygon = PackedVector2Array(-85, 11, 85, 11, 85, 17, -85, 17)
 color = Color(0.25, 0.88, 1, 1)
+[node name="SpikeTrap" type="Area2D" parent="."]
+position = Vector2(1140, 505)
+script = ExtResource("9_spike")
+message = "SPIKES — shadow won't save you from everything."
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpikeTrap"]
+shape = SubResource("SpikeShape")
+
+[node name="Visual" type="Polygon2D" parent="SpikeTrap"]
+polygon = PackedVector2Array(-75, 17, -55, -17, -35, 17, -15, -17, 5, 17, 25, -17, 45, 17, 65, -17, 75, 17)
+color = Color(0.95, 0.32, 0.48, 1)
+
+[node name="PuzzleGate" type="StaticBody2D" parent="."]
+position = Vector2(2520, 438)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PuzzleGate"]
+shape = SubResource("PuzzleGateShape")
+
+[node name="Visual" type="Polygon2D" parent="PuzzleGate"]
+polygon = PackedVector2Array(-28, -72, 28, -72, 28, 72, -28, 72)
+color = Color(0.40, 0.16, 0.58, 0.92)
+
+[node name="Rune" type="Label" parent="PuzzleGate"]
+offset_left = -18.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(0.88, 0.68, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "◆"
+horizontal_alignment = 1
+
+[node name="ShadowSwitch" type="Area2D" parent="."]
+position = Vector2(2260, 485)
+script = ExtResource("10_switch")
+target_path = NodePath("../PuzzleGate")
+hold_time = 0.8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShadowSwitch"]
+shape = SubResource("SwitchShape")
+
+[node name="Base" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(-45, -12, 45, -12, 45, 12, -45, 12)
+color = Color(0.12, 0.08, 0.22, 1)
+
+[node name="Rune" type="Polygon2D" parent="ShadowSwitch"]
+polygon = PackedVector2Array(0, -20, 20, 0, 0, 20, -20, 0)
+color = Color(0.76, 0.46, 1, 1)
+
+[node name="Hint" type="Label" parent="."]
+position = Vector2(2160, 405)
+theme_override_colors/font_color = Color(0.78, 0.68, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "Hold SHADOW on the rune to open the gate."
+
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="HUD"]
