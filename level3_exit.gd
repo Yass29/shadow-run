@@ -21,10 +21,12 @@ func _on_body_entered(body: Node) -> void:
 	GameState.unlock_level(4)
 	var level := get_parent()
 	var hud := level.get_node("HUD")
+	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_grade(3, str(summary["grade"]))
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
-	hud.get_node("FinalOverlay/Card/Thanks").text = "Blackout Tower unlocked. Total shards: ◆ %d" % GameState.shadow_shards
+	hud.get_node("FinalOverlay/Card/Thanks").text = "GRADE %s   •   %.1fs   •   %d deaths   •   ◆ %d" % [summary["grade"], float(summary["time"]), int(summary["deaths"]), GameState.shadow_shards]
 	hud.get_node("FinalOverlay").visible = true
