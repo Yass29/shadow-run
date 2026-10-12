@@ -20,6 +20,7 @@ func _on_body_entered(body: Node) -> void:
 	collected = true
 	var level := get_parent()
 	GameState.add_shards(1)
+	AudioManager.play_sfx("shard")
 	if level.has_method("collect_fragment"):
 		level.collect_fragment()
 	show_pickup_popup()
