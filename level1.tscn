@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://doxplx6nrjfq1"]
+[gd_scene load_steps=17 format=3 uid="uid://doxplx6nrjfq1"]
 
 [ext_resource type="Script" uid="uid://gnog5jweu2oj" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://level1.gd" id="4_level"]
 [ext_resource type="Script" path="res://exit_gate.gd" id="5_exit"]
 [ext_resource type="Script" path="res://drone.gd" id="6_drone"]
+[ext_resource type="Script" path="res://victory_overlay.gd" id="7_victory"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -404,25 +405,124 @@ theme_override_font_sizes/font_size = 20
 text = "CHECKPOINT REACHED"
 horizontal_alignment = 1
 
-[node name="LevelComplete" type="Label" parent="HUD"]
+[node name="VictoryOverlay" type="Control" parent="HUD"]
 visible = false
-offset_left = 325.0
-offset_top = 235.0
-offset_right = 825.0
-offset_bottom = 330.0
-theme_override_colors/font_color = Color(0.65, 1, 0.9, 1)
-theme_override_font_sizes/font_size = 34
-text = "LEVEL 01 COMPLETE\nTHE SHADOW REMEMBERS."
-horizontal_alignment = 1
-vertical_alignment = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("7_victory")
 
-[node name="CompleteHint" type="Label" parent="HUD"]
+[node name="Dim" type="ColorRect" parent="HUD/VictoryOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.018, 0.05, 0.88)
+
+[node name="Card" type="ColorRect" parent="HUD/VictoryOverlay"]
+offset_left = 285.0
+offset_top = 132.0
+offset_right = 865.0
+offset_bottom = 525.0
+color = Color(0.055, 0.06, 0.12, 0.98)
+
+[node name="Accent" type="ColorRect" parent="HUD/VictoryOverlay/Card"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 580.0
+offset_bottom = 5.0
+color = Color(0.36, 0.93, 0.82, 1)
+
+[node name="Eyebrow" type="Label" parent="HUD/VictoryOverlay/Card"]
+offset_left = 55.0
+offset_top = 42.0
+offset_right = 525.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.5, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 14
+text = "MISSION COMPLETE"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="HUD/VictoryOverlay/Card"]
+offset_left = 55.0
+offset_top = 82.0
+offset_right = 525.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.84, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 34
+text = "LEVEL 01 COMPLETE"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/VictoryOverlay/Card"]
+offset_left = 55.0
+offset_top = 130.0
+offset_right = 525.0
+offset_bottom = 165.0
+theme_override_colors/font_color = Color(0.68, 0.58, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+text = "THE SHADOW REMEMBERS."
+horizontal_alignment = 1
+
+[node name="Energy" type="Label" parent="HUD/VictoryOverlay/Card"]
+offset_left = 55.0
+offset_top = 195.0
+offset_right = 525.0
+offset_bottom = 230.0
+theme_override_colors/font_color = Color(0.62, 0.86, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "ENERGY RECOVERED   0 / 3"
+horizontal_alignment = 1
+
+[node name="Perfect" type="Label" parent="HUD/VictoryOverlay/Card"]
 visible = false
-offset_left = 380.0
-offset_top = 340.0
-offset_right = 770.0
-offset_bottom = 375.0
-theme_override_colors/font_color = Color(0.72, 0.74, 0.9, 1)
+offset_left = 55.0
+offset_top = 230.0
+offset_right = 525.0
+offset_bottom = 260.0
+theme_override_colors/font_color = Color(0.98, 0.78, 0.36, 1)
+theme_override_font_sizes/font_size = 15
+text = "PERFECT RUN  •  ALL FRAGMENTS FOUND"
+horizontal_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="HUD/VictoryOverlay/Card"]
+offset_left = 48.0
+offset_top = 286.0
+offset_right = 532.0
+offset_bottom = 340.0
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Replay" type="Button" parent="HUD/VictoryOverlay/Card/Actions"]
+custom_minimum_size = Vector2(135, 50)
+layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "ENTER  main menu     R  replay"
+text = "REPLAY"
+
+[node name="MainMenu" type="Button" parent="HUD/VictoryOverlay/Card/Actions"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "MAIN MENU"
+
+[node name="NextLevel" type="Button" parent="HUD/VictoryOverlay/Card/Actions"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "LEVEL 02"
+
+[node name="ComingSoon" type="Label" parent="HUD/VictoryOverlay/Card"]
+visible = false
+offset_left = 55.0
+offset_top = 348.0
+offset_right = 525.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(0.74, 0.66, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "LEVEL 02 // IN DEVELOPMENT"
 horizontal_alignment = 1
