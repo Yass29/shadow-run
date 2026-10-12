@@ -13,6 +13,7 @@ var anim_time := 0.0
 @export var shadow_dash_enabled := false
 var dash_cooldown := 0.0
 var dash_latched := false
+var dash_flash := 0.0
 
 @onready var body: Node2D = $Body
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -29,6 +30,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	anim_time += delta
 	dash_cooldown = max(dash_cooldown - delta, 0.0)
+	dash_flash = max(dash_flash - delta, 0.0)
 
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -60,7 +62,8 @@ func handle_shadow_dash() -> void:
 
 	dash_latched = true
 	dash_cooldown = 0.65
-	velocity.x = facing * 720.0
+	dash_flash = 0.16
+	velocity.x = facing * 760.0
 	velocity.y = 0.0
 
 func set_shadow_mode(enabled: bool) -> void:
@@ -89,7 +92,10 @@ func animate_character(direction: float, delta: float) -> void:
 		floor_shadow.modulate = floor_shadow.modulate.lerp(Color(0.55, 0.30, 1.0, 0.75), min(delta * 10.0, 1.0))
 		shadow_aura.modulate = shadow_aura.modulate.lerp(Color(0.72, 0.42, 1.0, 0.42), min(delta * 12.0, 1.0))
 		var pulse := 1.0 + sin(anim_time * 8.0) * 0.08
-		shadow_aura.scale = Vector2(1.18 * pulse, 0.82 * pulse)
+		var dash_boost := 1.55 if dash_flash > 0.0 else 1.0
+		shadow_aura.scale = Vector2(1.18 * pulse * dash_boost, 0.82 * pulse)
+		if dash_flash > 0.0:
+			shadow_aura.modulate = Color(0.95, 0.75, 1.0, 0.72)
 		return
 
 	body.modulate = body.modulate.lerp(Color.WHITE, min(delta * 10.0, 1.0))
