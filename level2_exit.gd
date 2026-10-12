@@ -5,6 +5,15 @@ var completed := false
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not completed:
+		return
+
+	if event.is_action_pressed("ui_accept"):
+		get_tree().change_scene_to_file("res://level3.tscn")
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		get_tree().reload_current_scene()
+
 func _on_body_entered(body: Node) -> void:
 	if completed or not body is CharacterBody2D:
 		return
