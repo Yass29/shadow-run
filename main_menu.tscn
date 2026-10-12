@@ -1,0 +1,98 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://main_menu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.025, 0.065, 1)
+
+[node name="City" type="Polygon2D" parent="."]
+position = Vector2(0, 0)
+polygon = PackedVector2Array(0, 470, 140, 470, 140, 330, 240, 330, 240, 470, 390, 470, 390, 285, 510, 285, 510, 470, 700, 470, 700, 355, 820, 355, 820, 470, 980, 470, 980, 310, 1080, 310, 1080, 470, 1150, 470, 1150, 647, 0, 647)
+color = Color(0.075, 0.065, 0.15, 1)
+
+[node name="AccentLine" type="ColorRect" parent="."]
+offset_left = 0.0
+offset_top = 515.0
+offset_right = 1150.0
+offset_bottom = 521.0
+color = Color(0.48, 0.31, 0.82, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 96.0
+offset_top = 105.0
+offset_right = 800.0
+offset_bottom = 185.0
+theme_override_colors/font_color = Color(0.78, 0.83, 1, 1)
+theme_override_font_sizes/font_size = 52
+text = "SHADOW RUN"
+
+[node name="Subtitle" type="Label" parent="."]
+offset_left = 101.0
+offset_top = 187.0
+offset_right = 790.0
+offset_bottom = 226.0
+theme_override_colors/font_color = Color(0.64, 0.55, 0.92, 1)
+theme_override_font_sizes/font_size = 20
+text = "MOVE IN THE LIGHT. SURVIVE IN THE SHADOW."
+
+[node name="Pitch" type="Label" parent="."]
+offset_left = 102.0
+offset_top = 250.0
+offset_right = 695.0
+offset_bottom = 335.0
+theme_override_colors/font_color = Color(0.68, 0.7, 0.82, 1)
+theme_override_font_sizes/font_size = 17
+text = "Cross the rooftops. Slip beneath barriers.\nHide from scanning drones. Collect the lost energy."
+
+[node name="PlayButton" type="Button" parent="."]
+offset_left = 102.0
+offset_top = 370.0
+offset_right = 330.0
+offset_bottom = 424.0
+theme_override_font_sizes/font_size = 20
+text = "PLAY LEVEL 01"
+
+[node name="QuitButton" type="Button" parent="."]
+offset_left = 102.0
+offset_top = 438.0
+offset_right = 330.0
+offset_bottom = 487.0
+theme_override_font_sizes/font_size = 16
+text = "QUIT"
+
+[node name="Controls" type="Label" parent="."]
+offset_left = 760.0
+offset_top = 405.0
+offset_right = 1095.0
+offset_bottom = 486.0
+theme_override_colors/font_color = Color(0.58, 0.62, 0.77, 1)
+theme_override_font_sizes/font_size = 15
+text = "← →   MOVE\nSPACE   JUMP\nSHIFT   BECOME SHADOW"
+
+[node name="Version" type="Label" parent="."]
+offset_left = 950.0
+offset_top = 595.0
+offset_right = 1110.0
+offset_bottom = 620.0
+theme_override_colors/font_color = Color(0.38, 0.4, 0.55, 1)
+theme_override_font_sizes/font_size = 12
+text = "PROTOTYPE 0.1"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="QuitButton" to="." method="_on_quit_pressed"]
