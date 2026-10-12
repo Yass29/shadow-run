@@ -1,11 +1,26 @@
 extends Area2D
 
+var completed := false
+
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not completed:
+		return
+
+	if event.is_action_pressed("ui_accept"):
+		get_tree().change_scene_to_file("res://main_menu.tscn")
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		get_tree().reload_current_scene()
+
 func _on_body_entered(body: Node) -> void:
-	if body is CharacterBody2D:
-		var complete_label := get_parent().get_node("HUD/LevelComplete")
-		complete_label.visible = true
-		body.velocity = Vector2.ZERO
-		body.set_physics_process(false)
+	if completed or not body is CharacterBody2D:
+		return
+
+	completed = true
+	var hud := get_parent().get_node("HUD")
+	hud.get_node("LevelComplete").visible = true
+	hud.get_node("CompleteHint").visible = true
+	body.velocity = Vector2.ZERO
+	body.set_physics_process(false)
