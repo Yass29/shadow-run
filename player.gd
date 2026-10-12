@@ -5,7 +5,7 @@ const JUMP_VELOCITY := -470.0
 const NORMAL_COLLISION_SIZE := Vector2(40, 68)
 const SHADOW_COLLISION_SIZE := Vector2(76, 22)
 const NORMAL_VISUAL_SCALE := Vector2.ONE
-const SHADOW_VISUAL_SCALE := Vector2(1.45, 0.42)
+const SHADOW_VISUAL_SCALE := Vector2(1.25, 0.60)
 
 var is_shadow := false
 var facing := 1.0
@@ -59,11 +59,11 @@ func animate_character(direction: float, delta: float) -> void:
 	body.scale = body.scale.lerp(target_scale, min(delta * 13.0, 1.0))
 
 	if is_shadow:
-		body.modulate = body.modulate.lerp(Color(0.72, 0.48, 1.0, 1.0), min(delta * 10.0, 1.0))
-		body.position.y = lerpf(body.position.y, 18.0, min(delta * 12.0, 1.0))
+		body.modulate = body.modulate.lerp(Color(0.72, 0.45, 1.0, 1.0), min(delta * 10.0, 1.0))
+		body.position.y = lerpf(body.position.y, 10.0, min(delta * 12.0, 1.0))
 		body.rotation = lerpf(body.rotation, 0.0, min(delta * 12.0, 1.0))
-		floor_shadow.scale = floor_shadow.scale.lerp(Vector2(1.8, 0.75), min(delta * 12.0, 1.0))
-		floor_shadow.modulate = floor_shadow.modulate.lerp(Color(0.55, 0.28, 0.95, 0.62), min(delta * 10.0, 1.0))
+		floor_shadow.scale = floor_shadow.scale.lerp(Vector2(1.6, 0.85), min(delta * 12.0, 1.0))
+		floor_shadow.modulate = floor_shadow.modulate.lerp(Color(0.55, 0.30, 1.0, 0.75), min(delta * 10.0, 1.0))
 		return
 
 	body.modulate = body.modulate.lerp(Color.WHITE, min(delta * 10.0, 1.0))
