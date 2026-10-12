@@ -20,9 +20,12 @@ func _on_body_entered(body: Node) -> void:
 	GameState.unlock_level(5)
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
-	var hud := get_parent().get_node("HUD")
+	var level := get_parent()
+	var hud := level.get_node("HUD")
+	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_grade(4, str(summary["grade"]))
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
-	hud.get_node("Complete").text = "BLACKOUT TOWER CLEARED\nENTER  FINAL CORE RUN     R  replay\n◆ %d SHARDS" % GameState.shadow_shards
+	hud.get_node("Complete").text = "BLACKOUT TOWER CLEARED\nGRADE %s   •   %.1fs   •   %d deaths\nENTER  FINAL CORE RUN     R  replay" % [summary["grade"], float(summary["time"]), int(summary["deaths"])]
 	hud.get_node("Complete").visible = true
