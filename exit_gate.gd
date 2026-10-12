@@ -14,6 +14,8 @@ func _on_body_entered(body: Node) -> void:
 	var hud := level.get_node("HUD")
 	var victory := hud.get_node("VictoryOverlay")
 	var fragments := int(level.get("fragments"))
+	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_grade(1, str(summary["grade"]))
 
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
@@ -24,4 +26,4 @@ func _on_body_entered(body: Node) -> void:
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
 	hud.get_node("FragmentCounter").visible = false
-	victory.show_victory(fragments)
+	victory.show_victory(fragments, summary)
