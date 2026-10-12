@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://level2.gd" id="4_level"]
 [ext_resource type="Script" path="res://light_beam.gd" id="5_beam"]
 [ext_resource type="Script" path="res://level2_exit.gd" id="6_exit"]
+[ext_resource type="Script" path="res://moving_platform.gd" id="8_move"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -217,6 +218,40 @@ theme_override_font_sizes/font_size = 14
 text = "CORE"
 horizontal_alignment = 1
 
+[node name="MovingPlatformA" type="AnimatableBody2D" parent="."]
+position = Vector2(1460, 360)
+script = ExtResource("8_move")
+travel = Vector2(210, 0)
+speed = 1.15
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatformA"]
+shape = SubResource("PlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="MovingPlatformA"]
+polygon = PackedVector2Array(-85, -17, 85, -17, 85, 17, -85, 17)
+color = Color(0.12, 0.28, 0.40, 1)
+
+[node name="Glow" type="Polygon2D" parent="MovingPlatformA"]
+polygon = PackedVector2Array(-85, 11, 85, 11, 85, 17, -85, 17)
+color = Color(0.25, 0.88, 1, 1)
+
+[node name="MovingPlatformB" type="AnimatableBody2D" parent="."]
+position = Vector2(2360, 390)
+script = ExtResource("8_move")
+travel = Vector2(0, -105)
+speed = 1.45
+phase = 1.4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatformB"]
+shape = SubResource("PlatformShape")
+
+[node name="Visual" type="Polygon2D" parent="MovingPlatformB"]
+polygon = PackedVector2Array(-85, -17, 85, -17, 85, 17, -85, 17)
+color = Color(0.12, 0.28, 0.40, 1)
+
+[node name="Glow" type="Polygon2D" parent="MovingPlatformB"]
+polygon = PackedVector2Array(-85, 11, 85, 11, 85, 17, -85, 17)
+color = Color(0.25, 0.88, 1, 1)
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="HUD"]
