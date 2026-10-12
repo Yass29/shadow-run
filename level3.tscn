@@ -1,0 +1,304 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
+[ext_resource type="Script" path="res://energy_fragment.gd" id="3_energy"]
+[ext_resource type="Script" path="res://level3.gd" id="4_level"]
+[ext_resource type="Script" path="res://rain.gd" id="5_rain"]
+[ext_resource type="Script" path="res://storm_field.gd" id="6_storm"]
+[ext_resource type="Script" path="res://level3_exit.gd" id="7_exit"]
+
+[sub_resource type="RectangleShape2D" id="PlayerShape"]
+size = Vector2(40, 68)
+
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(3200, 100)
+
+[sub_resource type="RectangleShape2D" id="PlatformShape"]
+size = Vector2(180, 34)
+
+[sub_resource type="RectangleShape2D" id="StormShape"]
+size = Vector2(210, 55)
+
+[sub_resource type="CircleShape2D" id="FragmentShape"]
+radius = 16.0
+
+[node name="Level3" type="Node2D"]
+script = ExtResource("4_level")
+
+[node name="Background" type="Polygon2D" parent="."]
+z_index = -30
+polygon = PackedVector2Array(0, 0, 3200, 0, 3200, 647, 0, 647)
+color = Color(0.015, 0.025, 0.05, 1)
+
+[node name="StormSky" type="Polygon2D" parent="."]
+z_index = -28
+polygon = PackedVector2Array(0, 0, 3200, 0, 3200, 235, 0, 235)
+color = Color(0.035, 0.06, 0.10, 1)
+
+[node name="Skyline" type="Polygon2D" parent="."]
+z_index = -20
+polygon = PackedVector2Array(0, 460, 120, 460, 120, 310, 230, 310, 230, 460, 390, 460, 390, 255, 520, 255, 520, 460, 700, 460, 700, 340, 820, 340, 820, 460, 1000, 460, 1000, 295, 1120, 295, 1120, 460, 1300, 460, 1300, 335, 1430, 335, 1430, 460, 1600, 460, 1600, 250, 1740, 250, 1740, 460, 1910, 460, 1910, 325, 2050, 325, 2050, 460, 2240, 460, 2240, 280, 2370, 280, 2370, 460, 2540, 460, 2540, 330, 2670, 330, 2670, 460, 2860, 460, 2860, 270, 3000, 270, 3000, 460, 3200, 460, 3200, 540, 0, 540)
+color = Color(0.055, 0.075, 0.12, 1)
+
+[node name="RainLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="Rain" type="Node2D" parent="RainLayer"]
+script = ExtResource("5_rain")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(140, 420)
+script = ExtResource("1_player")
+shadow_dash_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="FloorShadow" type="Polygon2D" parent="Player"]
+z_index = -1
+position = Vector2(0, 35)
+polygon = PackedVector2Array(-24, -5, 24, -5, 34, 0, 24, 5, -24, 5, -34, 0)
+color = Color(0.02, 0.015, 0.05, 1)
+modulate = Color(1, 1, 1, 0.35)
+
+[node name="ShadowAura" type="Polygon2D" parent="Player"]
+z_index = -2
+position = Vector2(0, 8)
+polygon = PackedVector2Array(0, -42, 30, -30, 48, 0, 30, 30, 0, 42, -30, 30, -48, 0, -30, -30)
+color = Color(0.72, 0.42, 1, 1)
+modulate = Color(1, 1, 1, 0)
+
+[node name="Body" parent="Player" instance=ExtResource("2_hero")]
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(250, -40)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_left = 0
+limit_top = 0
+limit_right = 3200
+limit_bottom = 647
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(1600, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="Visual" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-1600, -50, 1600, -50, 1600, 50, -1600, 50)
+color = Color(0.045, 0.07, 0.11, 1)
+
+[node name="TopGlow" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-1600, -50, 1600, -50, 1600, -44, -1600, -44)
+color = Color(0.28, 0.62, 0.95, 1)
+
+[node name="Intro" type="Label" parent="."]
+position = Vector2(220, 335)
+theme_override_colors/font_color = Color(0.62, 0.82, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "RAIN DISTRICT — electric puddles ignore your shadow form"
+
+[node name="Storm1" type="Area2D" parent="."]
+position = Vector2(690, 485)
+script = ExtResource("6_storm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm1"]
+shape = SubResource("StormShape")
+
+[node name="Visual" type="Polygon2D" parent="Storm1"]
+polygon = PackedVector2Array(-105, -27, 105, -27, 105, 27, -105, 27)
+color = Color(0.18, 0.55, 0.95, 0.72)
+
+[node name="Energy1" type="Area2D" parent="."]
+position = Vector2(890, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy1"]
+shape = SubResource("FragmentShape")
+[node name="Crystal" type="Polygon2D" parent="Energy1"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.45, 0.9, 1, 1)
+[node name="Core" type="Polygon2D" parent="Energy1"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.95, 1, 1, 1)
+
+[node name="Platform1" type="StaticBody2D" parent="."]
+position = Vector2(1160, 420)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform1"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="Platform1"]
+polygon = PackedVector2Array(-90, -17, 90, -17, 90, 17, -90, 17)
+color = Color(0.08, 0.15, 0.23, 1)
+
+[node name="Storm2" type="Area2D" parent="."]
+position = Vector2(1510, 485)
+script = ExtResource("6_storm")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm2"]
+shape = SubResource("StormShape")
+[node name="Visual" type="Polygon2D" parent="Storm2"]
+polygon = PackedVector2Array(-105, -27, 105, -27, 105, 27, -105, 27)
+color = Color(0.18, 0.55, 0.95, 0.72)
+
+[node name="Energy2" type="Area2D" parent="."]
+position = Vector2(1760, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy2"]
+shape = SubResource("FragmentShape")
+[node name="Crystal" type="Polygon2D" parent="Energy2"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.45, 0.9, 1, 1)
+[node name="Core" type="Polygon2D" parent="Energy2"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.95, 1, 1, 1)
+
+[node name="Platform2" type="StaticBody2D" parent="."]
+position = Vector2(2110, 405)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="Platform2"]
+polygon = PackedVector2Array(-90, -17, 90, -17, 90, 17, -90, 17)
+color = Color(0.08, 0.15, 0.23, 1)
+
+[node name="Storm3" type="Area2D" parent="."]
+position = Vector2(2410, 485)
+script = ExtResource("6_storm")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Storm3"]
+shape = SubResource("StormShape")
+[node name="Visual" type="Polygon2D" parent="Storm3"]
+polygon = PackedVector2Array(-105, -27, 105, -27, 105, 27, -105, 27)
+color = Color(0.18, 0.55, 0.95, 0.72)
+
+[node name="Energy3" type="Area2D" parent="."]
+position = Vector2(2690, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy3"]
+shape = SubResource("FragmentShape")
+[node name="Crystal" type="Polygon2D" parent="Energy3"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.45, 0.9, 1, 1)
+[node name="Core" type="Polygon2D" parent="Energy3"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.95, 1, 1, 1)
+
+[node name="Finish" type="Area2D" parent="."]
+position = Vector2(3020, 455)
+script = ExtResource("7_exit")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Finish"]
+shape = SubResource("StormShape")
+[node name="Visual" type="Polygon2D" parent="Finish"]
+polygon = PackedVector2Array(-45, -58, 45, -58, 45, 58, -45, 58)
+color = Color(0.22, 0.78, 0.70, 0.8)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="HUD"]
+offset_left = 28.0
+offset_top = 22.0
+offset_right = 470.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "SHADOW RUN // LEVEL 03 — RAIN DISTRICT"
+
+[node name="Controls" type="Label" parent="HUD"]
+offset_left = 30.0
+offset_top = 57.0
+offset_right = 720.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.62, 0.72, 0.84, 1)
+theme_override_font_sizes/font_size = 15
+text = "← → move    SPACE jump    SHIFT shadow    SHIFT + E dash"
+
+[node name="FragmentCounter" type="Label" parent="HUD"]
+offset_left = 900.0
+offset_top = 24.0
+offset_right = 1115.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.62, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "STORM ENERGY 0 / 3"
+horizontal_alignment = 2
+
+[node name="AlertMessage" type="Label" parent="HUD"]
+visible = false
+offset_left = 250.0
+offset_top = 118.0
+offset_right = 900.0
+offset_bottom = 154.0
+theme_override_colors/font_color = Color(0.55, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "ELECTRIC RAIN"
+horizontal_alignment = 1
+
+[node name="FinalOverlay" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/FinalOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.02, 0.05, 0.9)
+
+[node name="Card" type="ColorRect" parent="HUD/FinalOverlay"]
+offset_left = 300.0
+offset_top = 145.0
+offset_right = 850.0
+offset_bottom = 505.0
+color = Color(0.045, 0.065, 0.105, 0.98)
+
+[node name="Accent" type="ColorRect" parent="HUD/FinalOverlay/Card"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 550.0
+offset_bottom = 5.0
+color = Color(0.35, 0.82, 1, 1)
+
+[node name="Title" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 62.0
+offset_right = 505.0
+offset_bottom = 112.0
+theme_override_colors/font_color = Color(0.78, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 34
+text = "RAIN DISTRICT CLEARED"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 122.0
+offset_right = 505.0
+offset_bottom = 165.0
+theme_override_colors/font_color = Color(0.58, 0.76, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "THE STORM COULDN'T FIND YOUR SHADOW."
+horizontal_alignment = 1
+
+[node name="Thanks" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 210.0
+offset_right = 505.0
+offset_bottom = 252.0
+theme_override_colors/font_color = Color(0.68, 0.72, 0.86, 1)
+theme_override_font_sizes/font_size = 16
+text = "Thanks for playing the Shadow Run prototype."
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD/FinalOverlay/Card"]
+offset_left = 45.0
+offset_top = 290.0
+offset_right = 505.0
+offset_bottom = 328.0
+theme_override_colors/font_color = Color(0.55, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "ENTER  main menu     R  replay"
+horizontal_alignment = 1
