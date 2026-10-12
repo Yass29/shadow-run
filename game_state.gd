@@ -5,6 +5,7 @@ const SAVE_PATH := "user://shadow_run.cfg"
 var selected_skin := "shade"
 var shadow_shards := 0
 var max_unlocked_level := 1
+var best_grades := {}
 var unlocked_skins := {
 	"shade": true,
 	"neon": true
@@ -147,6 +148,7 @@ func save_progress() -> void:
 	config.set_value("progress", "selected_skin", selected_skin)
 	config.set_value("progress", "shadow_shards", shadow_shards)
 	config.set_value("progress", "max_unlocked_level", max_unlocked_level)
+	config.set_value("progress", "best_grades", best_grades)
 	config.set_value("progress", "unlocked_skins", unlocked_skins)
 	config.set_value("progress", "premium_wraith_owned", premium_wraith_owned)
 	config.set_value("progress", "premium_specter_owned", premium_specter_owned)
@@ -159,6 +161,31 @@ func load_progress() -> void:
 	selected_skin = str(config.get_value("progress", "selected_skin", "shade"))
 	shadow_shards = int(config.get_value("progress", "shadow_shards", 0))
 	max_unlocked_level = int(config.get_value("progress", "max_unlocked_level", 1))
+	best_grades = config.get_value("progress", "best_grades", {})
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
 	premium_wraith_owned = bool(config.get_value("progress", "premium_wraith_owned", false))
 	premium_specter_owned = bool(config.get_value("progress", "premium_specter_owned", false))
+
+
+func calculate_grade(time_seconds: float, deaths: int, fragments: int, par_time: float) -> String:
+	var score := 100
+	if time_seconds > par_time:
+		score -= int((time_seconds - par_time) / 3.0)
+	score -= deaths * 12
+	score += fragments * 4
+
+	if score >= 95:
+		return "S"
+	if score >= 82:
+		return "A"
+	if score >= 68:
+		return "B"
+	return "C"
+
+func submit_grade(level_number: int, grade: String) -> void:
+	var order := {"C": 0, "B": 1, "A": 2, "S": 3}
+	var key := str(level_number)
+	var previous := str(best_grades.get(key, ""))
+	if previous == "" or int(order.get(grade, 0)) > int(order.get(previous, -1)):
+		best_grades[key] = grade
+		save_progress()
