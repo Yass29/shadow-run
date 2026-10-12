@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://doxplx6nrjfq1"]
 
 [ext_resource type="Script" uid="uid://gnog5jweu2oj" path="res://player.gd" id="1_dopym"]
-[ext_resource type="Texture2D" uid="uid://df5ovurx35pcl" path="res://icon.svg" id="2_ootpb"]
+[ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
 [ext_resource type="Script" path="res://energy_fragment.gd" id="3_energy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
@@ -67,8 +67,14 @@ script = ExtResource("1_dopym")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("RectangleShape2D_player")
 
-[node name="Sprite2D" type="Sprite2D" parent="Player"]
-texture = ExtResource("2_ootpb")
+[node name="FloorShadow" type="Polygon2D" parent="Player"]
+z_index = -1
+position = Vector2(0, 35)
+polygon = PackedVector2Array(-24, -5, 24, -5, 34, 0, 24, 5, -24, 5, -34, 0)
+color = Color(0.02, 0.015, 0.05, 1)
+modulate = Color(1, 1, 1, 0.35)
+
+[node name="Body" parent="Player" instance=ExtResource("2_hero")]
 
 [node name="Ground" type="StaticBody2D" parent="."]
 position = Vector2(575, 560)
