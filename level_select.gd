@@ -5,7 +5,8 @@ const LEVELS := [
 	{"number": 2, "name": "LIGHT GRID", "scene": "res://level2.tscn", "accent": Color(0.20, 0.76, 0.92, 1.0)},
 	{"number": 3, "name": "RAIN DISTRICT", "scene": "res://level3.tscn", "accent": Color(0.30, 0.62, 0.95, 1.0)},
 	{"number": 4, "name": "BLACKOUT TOWER", "scene": "res://level4.tscn", "accent": Color(0.64, 0.36, 0.92, 1.0)},
-	{"number": 5, "name": "CORE RUN", "scene": "res://level5.tscn", "accent": Color(0.96, 0.30, 0.58, 1.0)}
+	{"number": 5, "name": "CORE RUN", "scene": "res://level5.tscn", "accent": Color(0.96, 0.30, 0.58, 1.0)},
+	{"number": 6, "name": "MEMORY VAULT", "scene": "res://level6.tscn", "accent": Color(0.35, 0.92, 0.78, 1.0)}
 ]
 
 @onready var list: VBoxContainer = $Panel/List
@@ -25,11 +26,13 @@ func build_levels() -> void:
 		row.disabled = not unlocked
 		var grade := str(GameState.best_grades.get(str(data["number"]), ""))
 		var grade_text := "   •   BEST %s" % grade if grade != "" else ""
+		var best_time := float(GameState.best_times.get(str(data["number"]), 0.0))
+		var time_text := "   •   %.1fs" % best_time if best_time > 0.0 else ""
 		row.text = "LEVEL %02d   //   %s%s%s" % [
 			int(data["number"]),
 			str(data["name"]),
 			"" if unlocked else "   [LOCKED]",
-			grade_text
+			grade_text + time_text
 		]
 		row.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		row.add_theme_font_size_override("font_size", 18)
@@ -42,7 +45,7 @@ func build_levels() -> void:
 func _open_level(scene_path: String) -> void:
 	var number_text := scene_path.get_file().trim_prefix("level").trim_suffix(".tscn")
 	var number := int(number_text)
-	var names := {1: "ROOFTOP INITIATION", 2: "LIGHT GRID", 3: "RAIN DISTRICT", 4: "BLACKOUT TOWER", 5: "CORE RUN"}
+	var names := {1: "ROOFTOP INITIATION", 2: "LIGHT GRID", 3: "RAIN DISTRICT", 4: "BLACKOUT TOWER", 5: "CORE RUN", 6: "MEMORY VAULT"}
 	ScreenTransition.change_scene(scene_path, "LEVEL %02d" % number, str(names.get(number, "SHADOW RUN")))
 
 func _back() -> void:
