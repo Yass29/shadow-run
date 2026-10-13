@@ -24,13 +24,19 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	collected = true
+	set_deferred("monitoring", false)
+	if has_node("Visual"):
+		$Visual.visible = false
+	if has_node("CollisionShape2D"):
+		$CollisionShape2D.set_deferred("disabled", true)
+
 	var reward_was_claimed := GameState.memory_master_reward_claimed
 	GameState.unlock_memory(memory_id, memory_text)
 	GameState.add_shards(shard_reward)
 	var echo_unlocked := not reward_was_claimed and GameState.memory_master_reward_claimed
 
 	AudioManager.play_sfx("shard")
-	show_recovery_cinematic(echo_unlocked)
+	await show_recovery_cinematic(echo_unlocked)
 
 	var level := get_parent()
 	if level.has_method("show_memory"):
