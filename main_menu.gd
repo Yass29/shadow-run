@@ -24,6 +24,9 @@ func _on_levels_pressed() -> void:
 func _on_characters_pressed() -> void:
 	ScreenTransition.change_scene("res://character_select.tscn")
 
+func _on_memories_pressed() -> void:
+	ScreenTransition.change_scene("res://memory_archive.tscn")
+
 func _on_story_pressed() -> void:
 	ScreenTransition.change_scene("res://story_intro.tscn", "STORY ARCHIVE", "THE NIGHT THE CORE BROKE.")
 
