@@ -36,7 +36,7 @@ offset_right = 850.0
 offset_bottom = 106.0
 theme_override_colors/font_color = Color(0.64, 0.58, 0.92, 1)
 theme_override_font_sizes/font_size = 14
-text = "Collect energy fragments in levels to unlock cosmetic shadows."
+text = "Collect shards, recover memories, and unlock cosmetic shadows."
 
 [node name="Shards" type="Label" parent="."]
 offset_left = 820.0
@@ -59,7 +59,7 @@ vertical_scroll_mode = 0
 [node name="Grid" type="GridContainer" parent="Scroll"]
 layout_mode = 2
 theme_override_constants/h_separation = 18
-columns = 7
+columns = 8
 
 [node name="Current" type="Label" parent="."]
 offset_left = 120.0

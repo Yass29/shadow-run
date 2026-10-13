@@ -46,7 +46,10 @@ func make_card(skin_id: String) -> Control:
 	type_label.size = Vector2(211, 25)
 	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
-	if bool(skin["premium"]):
+	if bool(skin.get("memory_reward", false)):
+		type_label.text = "MEMORY MASTER"
+		type_label.add_theme_color_override("font_color", Color(0.55, 1.0, 0.86, 1.0))
+	elif bool(skin["premium"]):
 		type_label.text = "PREMIUM  %s" % skin["price"]
 		type_label.add_theme_color_override("font_color", Color(0.95, 0.62, 1.0, 1.0))
 	elif int(skin["cost"]) > 0:
@@ -68,6 +71,9 @@ func make_card(skin_id: String) -> Control:
 		button.text = "SELECTED"
 	elif GameState.is_owned(skin_id):
 		button.text = "USE %s" % skin["name"]
+	elif bool(skin.get("memory_reward", false)):
+		button.text = "LOCKED  6/6 MEMORIES"
+		button.disabled = true
 	elif bool(skin["premium"]):
 		button.text = "PREMIUM  %s" % skin["price"]
 	else:
@@ -81,6 +87,8 @@ func choose(skin_id: String) -> void:
 	if GameState.is_owned(skin_id):
 		GameState.select_skin(skin_id)
 		status.text = "%s SELECTED" % skin["name"]
+	elif bool(skin.get("memory_reward", false)):
+		status.text = "Recover all 6 memories to unlock ECHO."
 	elif bool(skin["premium"]):
 		status.text = "%s is premium (%s). Real checkout comes with the web release." % [skin["name"], skin["price"]]
 	else:
