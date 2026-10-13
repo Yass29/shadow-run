@@ -22,7 +22,23 @@ func _on_body_entered(body: Node) -> void:
 	GameState.unlock_memory(memory_id, memory_text)
 	GameState.add_shards(shard_reward)
 	AudioManager.play_sfx("shard")
+	show_popup()
 	var level := get_parent()
 	if level.has_method("show_memory"):
 		level.show_memory(memory_id, memory_text)
 	queue_free()
+
+
+func show_popup() -> void:
+	var popup := Label.new()
+	popup.text = "%s RECOVERED" % memory_id
+	popup.position = global_position + Vector2(-70, -52)
+	popup.add_theme_color_override("font_color", Color(0.88, 0.72, 1.0, 1.0))
+	popup.add_theme_font_size_override("font_size", 18)
+	get_tree().current_scene.add_child(popup)
+	var tween := popup.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(popup, "position:y", popup.position.y - 38.0, 0.8)
+	tween.tween_property(popup, "modulate:a", 0.0, 0.8)
+	tween.set_parallel(false)
+	tween.tween_callback(popup.queue_free)
