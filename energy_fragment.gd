@@ -19,17 +19,17 @@ func _on_body_entered(body: Node) -> void:
 
 	collected = true
 	var level := get_parent()
-	GameState.add_shards(1)
+	var combo: Dictionary = GameState.collect_combo_shard()
 	AudioManager.play_sfx("shard")
 	if level.has_method("collect_fragment"):
 		level.collect_fragment()
-	show_pickup_popup()
+	show_pickup_popup(int(combo["reward"]), int(combo["combo"]))
 	queue_free()
 
 
-func show_pickup_popup() -> void:
+func show_pickup_popup(reward: int, combo: int) -> void:
 	var popup := Label.new()
-	popup.text = "+1 ◆"
+	popup.text = "+%d ◆   x%d" % [reward, combo] if combo > 1 else "+%d ◆" % reward
 	popup.position = global_position + Vector2(-22, -42)
 	popup.add_theme_color_override("font_color", Color(0.60, 0.92, 1.0, 1.0))
 	popup.add_theme_font_size_override("font_size", 18)
