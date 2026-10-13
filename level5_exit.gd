@@ -9,7 +9,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not completed:
 		return
 	if event.is_action_pressed("ui_accept"):
-		ScreenTransition.change_scene("res://main_menu.tscn", "SHADOW RUN", "Return to the city.")
+		ScreenTransition.change_scene("res://story_outro.tscn", "THE CORE IS SILENT", "But your shadow remembers.")
 	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
 		get_tree().reload_current_scene()
 

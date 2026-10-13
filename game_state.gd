@@ -6,6 +6,8 @@ var selected_skin := "shade"
 var shadow_shards := 0
 var max_unlocked_level := 1
 var best_grades := {}
+var intro_seen := false
+var ending_seen := false
 var unlocked_skins := {
 	"shade": true,
 	"neon": true
@@ -149,6 +151,8 @@ func save_progress() -> void:
 	config.set_value("progress", "shadow_shards", shadow_shards)
 	config.set_value("progress", "max_unlocked_level", max_unlocked_level)
 	config.set_value("progress", "best_grades", best_grades)
+	config.set_value("progress", "intro_seen", intro_seen)
+	config.set_value("progress", "ending_seen", ending_seen)
 	config.set_value("progress", "unlocked_skins", unlocked_skins)
 	config.set_value("progress", "premium_wraith_owned", premium_wraith_owned)
 	config.set_value("progress", "premium_specter_owned", premium_specter_owned)
@@ -162,6 +166,8 @@ func load_progress() -> void:
 	shadow_shards = int(config.get_value("progress", "shadow_shards", 0))
 	max_unlocked_level = int(config.get_value("progress", "max_unlocked_level", 1))
 	best_grades = config.get_value("progress", "best_grades", {})
+	intro_seen = bool(config.get_value("progress", "intro_seen", false))
+	ending_seen = bool(config.get_value("progress", "ending_seen", false))
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
 	premium_wraith_owned = bool(config.get_value("progress", "premium_wraith_owned", false))
 	premium_specter_owned = bool(config.get_value("progress", "premium_specter_owned", false))
