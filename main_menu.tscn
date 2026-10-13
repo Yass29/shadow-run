@@ -83,6 +83,14 @@ offset_bottom = 544.0
 theme_override_font_sizes/font_size = 16
 text = "CHARACTERS"
 
+[node name="StoryButton" type="Button" parent="."]
+offset_left = 350.0
+offset_top = 495.0
+offset_right = 578.0
+offset_bottom = 544.0
+theme_override_font_sizes/font_size = 16
+text = "STORY"
+
 [node name="QuitButton" type="Button" parent="."]
 offset_left = 102.0
 offset_top = 552.0
@@ -127,10 +135,11 @@ offset_right = 1110.0
 offset_bottom = 620.0
 theme_override_colors/font_color = Color(0.38, 0.4, 0.55, 1)
 theme_override_font_sizes/font_size = 12
-text = "PROTOTYPE 0.4  •  5 LEVELS  •  7 SHADOWS"
+text = "PROTOTYPE 0.5  •  STORY  •  CORE SENTINEL"
 horizontal_alignment = 2
 
 [connection signal="pressed" from="PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="LevelsButton" to="." method="_on_levels_pressed"]
 [connection signal="pressed" from="CharactersButton" to="." method="_on_characters_pressed"]
+[connection signal="pressed" from="StoryButton" to="." method="_on_story_pressed"]
 [connection signal="pressed" from="QuitButton" to="." method="_on_quit_pressed"]
