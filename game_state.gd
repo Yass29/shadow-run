@@ -8,6 +8,7 @@ var max_unlocked_level := 1
 var best_grades := {}
 var best_times := {}
 var unlocked_memories := {}
+var s_rank_rewards := {}
 var intro_seen := false
 var ending_seen := false
 var unlocked_skins := {
@@ -173,6 +174,7 @@ func save_progress() -> void:
 	config.set_value("progress", "best_grades", best_grades)
 	config.set_value("progress", "best_times", best_times)
 	config.set_value("progress", "unlocked_memories", unlocked_memories)
+	config.set_value("progress", "s_rank_rewards", s_rank_rewards)
 	config.set_value("progress", "intro_seen", intro_seen)
 	config.set_value("progress", "ending_seen", ending_seen)
 	config.set_value("progress", "unlocked_skins", unlocked_skins)
@@ -190,6 +192,7 @@ func load_progress() -> void:
 	best_grades = config.get_value("progress", "best_grades", {})
 	best_times = config.get_value("progress", "best_times", {})
 	unlocked_memories = config.get_value("progress", "unlocked_memories", {})
+	s_rank_rewards = config.get_value("progress", "s_rank_rewards", {})
 	intro_seen = bool(config.get_value("progress", "intro_seen", false))
 	ending_seen = bool(config.get_value("progress", "ending_seen", false))
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
@@ -225,7 +228,12 @@ func submit_grade(level_number: int, grade: String) -> void:
 	var previous := str(best_grades.get(key, ""))
 	if previous == "" or int(order.get(grade, 0)) > int(order.get(previous, -1)):
 		best_grades[key] = grade
-		save_progress()
+
+	if grade == "S" and not bool(s_rank_rewards.get(key, false)):
+		s_rank_rewards[key] = true
+		shadow_shards += 5
+
+	save_progress()
 
 
 func submit_time(level_number: int, time_seconds: float) -> bool:
