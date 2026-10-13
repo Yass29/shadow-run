@@ -15,6 +15,7 @@ func _on_body_entered(body: Node) -> void:
 	var victory := hud.get_node("VictoryOverlay")
 	var fragments := int(level.get("fragments"))
 	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_time(1, float(summary["time"]))
 	GameState.submit_grade(1, str(summary["grade"]))
 
 	body.velocity = Vector2.ZERO
