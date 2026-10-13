@@ -1,0 +1,456 @@
+[gd_scene load_steps=22 format=3]
+
+[ext_resource type="Script" path="res://player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
+[ext_resource type="Script" path="res://energy_fragment.gd" id="3_energy"]
+[ext_resource type="Script" path="res://level6.gd" id="4_level"]
+[ext_resource type="Script" path="res://blackout_zone.gd" id="5_blackout"]
+[ext_resource type="Script" path="res://timed_switch.gd" id="6_switch"]
+[ext_resource type="Script" path="res://timed_gate.gd" id="7_gate"]
+[ext_resource type="Script" path="res://fake_shard.gd" id="8_fake"]
+[ext_resource type="Script" path="res://memory_collectible.gd" id="9_memory"]
+[ext_resource type="Script" path="res://hunter.gd" id="10_hunter"]
+[ext_resource type="Script" path="res://drone.gd" id="11_drone"]
+[ext_resource type="Script" path="res://level6_exit.gd" id="12_exit"]
+[ext_resource type="Script" path="res://moving_platform.gd" id="13_move"]
+
+[sub_resource type="RectangleShape2D" id="PlayerShape"]
+size = Vector2(40, 68)
+
+[sub_resource type="RectangleShape2D" id="GroundShape"]
+size = Vector2(4600, 100)
+
+[sub_resource type="RectangleShape2D" id="PlatformShape"]
+size = Vector2(190, 32)
+
+[sub_resource type="RectangleShape2D" id="BlackoutShape"]
+size = Vector2(720, 250)
+
+[sub_resource type="RectangleShape2D" id="GateShape"]
+size = Vector2(58, 150)
+
+[sub_resource type="RectangleShape2D" id="SwitchShape"]
+size = Vector2(80, 54)
+
+[sub_resource type="CircleShape2D" id="CollectibleShape"]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id="HunterShape"]
+radius = 24.0
+
+[sub_resource type="RectangleShape2D" id="DroneShape"]
+size = Vector2(250, 180)
+
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(72, 110)
+
+[node name="Level6" type="Node2D"]
+script = ExtResource("4_level")
+
+[node name="Background" type="Polygon2D" parent="."]
+z_index = -30
+polygon = PackedVector2Array(0, 0, 4600, 0, 4600, 647, 0, 647)
+color = Color(0.008, 0.012, 0.03, 1)
+
+[node name="ArchiveGlow" type="Polygon2D" parent="."]
+z_index = -28
+polygon = PackedVector2Array(0, 130, 4600, 130, 4600, 410, 0, 410)
+color = Color(0.025, 0.08, 0.09, 0.58)
+
+[node name="Skyline" type="Polygon2D" parent="."]
+z_index = -20
+polygon = PackedVector2Array(0, 470, 140, 470, 140, 320, 260, 320, 260, 470, 430, 470, 430, 250, 560, 250, 560, 470, 730, 470, 730, 330, 860, 330, 860, 470, 1030, 470, 1030, 280, 1160, 280, 1160, 470, 1340, 470, 1340, 345, 1470, 345, 1470, 470, 1640, 470, 1640, 230, 1770, 230, 1770, 470, 1940, 470, 1940, 315, 2070, 315, 2070, 470, 2240, 470, 2240, 270, 2370, 270, 2370, 470, 2540, 470, 2540, 335, 2670, 335, 2670, 470, 2840, 470, 2840, 245, 2970, 245, 2970, 470, 3140, 470, 3140, 325, 3270, 325, 3270, 470, 3440, 470, 3440, 260, 3570, 260, 3570, 470, 3740, 470, 3740, 340, 3870, 340, 3870, 470, 4040, 470, 4040, 275, 4170, 275, 4170, 470, 4340, 470, 4340, 325, 4470, 325, 4470, 470, 4600, 470, 4600, 540, 0, 540)
+color = Color(0.035, 0.085, 0.10, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(140, 420)
+script = ExtResource("1_player")
+shadow_dash_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="FloorShadow" type="Polygon2D" parent="Player"]
+z_index = -1
+position = Vector2(0, 35)
+polygon = PackedVector2Array(-24, -5, 24, -5, 34, 0, 24, 5, -24, 5, -34, 0)
+color = Color(0.02, 0.015, 0.05, 1)
+modulate = Color(1, 1, 1, 0.35)
+
+[node name="ShadowAura" type="Polygon2D" parent="Player"]
+z_index = -2
+position = Vector2(0, 8)
+polygon = PackedVector2Array(0, -42, 30, -30, 48, 0, 30, 30, 0, 42, -30, 30, -48, 0, -30, -30)
+color = Color(0.72, 0.42, 1, 1)
+modulate = Color(1, 1, 1, 0)
+
+[node name="Body" parent="Player" instance=ExtResource("2_hero")]
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(250, -40)
+position_smoothing_enabled = true
+position_smoothing_speed = 7.5
+limit_left = 0
+limit_top = 0
+limit_right = 4600
+limit_bottom = 647
+
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(2300, 560)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="Visual" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-2300, -50, 2300, -50, 2300, 50, -2300, 50)
+color = Color(0.035, 0.09, 0.10, 1)
+
+[node name="TopGlow" type="Polygon2D" parent="Ground"]
+polygon = PackedVector2Array(-2300, -50, 2300, -50, 2300, -44, -2300, -44)
+color = Color(0.28, 0.88, 0.82, 1)
+
+[node name="Intro" type="Label" parent="."]
+position = Vector2(210, 340)
+theme_override_colors/font_color = Color(0.62, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 15
+text = "MEMORY VAULT — darkness hides the path. Your shadow reveals it."
+
+[node name="UpperA" type="StaticBody2D" parent="."]
+position = Vector2(610, 355)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperA"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="UpperA"]
+polygon = PackedVector2Array(-95, -16, 95, -16, 95, 16, -95, 16)
+color = Color(0.07, 0.18, 0.20, 1)
+
+[node name="UpperB" type="StaticBody2D" parent="."]
+position = Vector2(900, 290)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperB"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="UpperB"]
+polygon = PackedVector2Array(-95, -16, 95, -16, 95, 16, -95, 16)
+color = Color(0.07, 0.18, 0.20, 1)
+
+[node name="UpperC" type="StaticBody2D" parent="."]
+position = Vector2(1200, 350)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="UpperC"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="UpperC"]
+polygon = PackedVector2Array(-95, -16, 95, -16, 95, 16, -95, 16)
+color = Color(0.07, 0.18, 0.20, 1)
+
+[node name="Blackout" type="Area2D" parent="."]
+position = Vector2(980, 385)
+script = ExtResource("5_blackout")
+darkness = 0.93
+shadow_visibility = 0.18
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blackout"]
+shape = SubResource("BlackoutShape")
+
+[node name="BlackoutFrame" type="Polygon2D" parent="."]
+z_index = -5
+polygon = PackedVector2Array(620, 235, 1340, 235, 1340, 510, 620, 510)
+color = Color(0.01, 0.015, 0.03, 0.78)
+
+[node name="Memory1" type="Area2D" parent="."]
+position = Vector2(900, 230)
+script = ExtResource("9_memory")
+memory_id = "M04"
+memory_text = "The Core was built to remove fear. It removed choice instead."
+shard_reward = 3
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Memory1"]
+shape = SubResource("CollectibleShape")
+[node name="Visual" type="Polygon2D" parent="Memory1"]
+polygon = PackedVector2Array(0, -24, 18, -18, 24, 0, 18, 18, 0, 24, -18, 18, -24, 0, -18, -18)
+color = Color(0.58, 0.88, 1, 0.9)
+
+[node name="Energy1" type="Area2D" parent="."]
+position = Vector2(1370, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy1"]
+shape = SubResource("CollectibleShape")
+[node name="Crystal" type="Polygon2D" parent="Energy1"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.45, 1, 0.86, 1)
+[node name="Core" type="Polygon2D" parent="Energy1"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.95, 1, 1, 1)
+
+[node name="FakeShard" type="Area2D" parent="."]
+position = Vector2(2050, 445)
+script = ExtResource("8_fake")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FakeShard"]
+shape = SubResource("CollectibleShape")
+[node name="Visual" type="Polygon2D" parent="FakeShard"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(1, 0.34, 0.50, 1)
+
+[node name="HunterDecoy" type="Area2D" parent="."]
+position = Vector2(2260, 350)
+script = ExtResource("10_hunter")
+activation_distance = 720.0
+chase_speed = 205.0
+search_duration = 3.2
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HunterDecoy"]
+shape = SubResource("HunterShape")
+[node name="Body" type="Polygon2D" parent="HunterDecoy"]
+polygon = PackedVector2Array(0, -30, 24, -12, 20, 18, 0, 30, -20, 18, -24, -12)
+color = Color(0.88, 0.10, 0.26, 1)
+[node name="Eye" type="Polygon2D" parent="HunterDecoy"]
+polygon = PackedVector2Array(-10, -4, 10, -4, 14, 0, 10, 4, -10, 4, -14, 0)
+color = Color(1, 0.80, 0.85, 1)
+
+[node name="MovingPlatform" type="AnimatableBody2D" parent="."]
+position = Vector2(2440, 390)
+script = ExtResource("13_move")
+travel = Vector2(260, -105)
+speed = 1.2
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform"]
+shape = SubResource("PlatformShape")
+[node name="Visual" type="Polygon2D" parent="MovingPlatform"]
+polygon = PackedVector2Array(-95, -16, 95, -16, 95, 16, -95, 16)
+color = Color(0.10, 0.24, 0.25, 1)
+[node name="Glow" type="Polygon2D" parent="MovingPlatform"]
+polygon = PackedVector2Array(-95, 10, 95, 10, 95, 16, -95, 16)
+color = Color(0.38, 1, 0.86, 1)
+
+[node name="Memory2" type="Area2D" parent="."]
+position = Vector2(2600, 245)
+script = ExtResource("9_memory")
+memory_id = "M05"
+memory_text = "Your shadow learned to move before you remembered how to resist."
+shard_reward = 3
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Memory2"]
+shape = SubResource("CollectibleShape")
+[node name="Visual" type="Polygon2D" parent="Memory2"]
+polygon = PackedVector2Array(0, -24, 18, -18, 24, 0, 18, 18, 0, 24, -18, 18, -24, 0, -18, -18)
+color = Color(0.72, 0.52, 1, 0.9)
+
+[node name="TimedSwitch" type="Area2D" parent="."]
+position = Vector2(2860, 485)
+script = ExtResource("6_switch")
+target_path = NodePath("../TimedGate")
+open_duration = 4.4
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TimedSwitch"]
+shape = SubResource("SwitchShape")
+[node name="Visual" type="Polygon2D" parent="TimedSwitch"]
+polygon = PackedVector2Array(-40, -14, 40, -14, 40, 14, -40, 14)
+color = Color(0.36, 0.90, 0.72, 1)
+
+[node name="TimedHint" type="Label" parent="."]
+position = Vector2(2740, 420)
+theme_override_colors/font_color = Color(0.58, 0.95, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+text = "TIMED LOCK — hit the switch, then RUN."
+
+[node name="TimedGate" type="StaticBody2D" parent="."]
+position = Vector2(3240, 435)
+script = ExtResource("7_gate")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TimedGate"]
+shape = SubResource("GateShape")
+[node name="Visual" type="Polygon2D" parent="TimedGate"]
+polygon = PackedVector2Array(-29, -75, 29, -75, 29, 75, -29, 75)
+color = Color(0.30, 0.82, 0.68, 0.95)
+
+[node name="Energy2" type="Area2D" parent="."]
+position = Vector2(3390, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy2"]
+shape = SubResource("CollectibleShape")
+[node name="Crystal" type="Polygon2D" parent="Energy2"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.45, 1, 0.86, 1)
+[node name="Core" type="Polygon2D" parent="Energy2"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.95, 1, 1, 1)
+
+[node name="Drone" type="Area2D" parent="."]
+position = Vector2(3650, 190)
+script = ExtResource("11_drone")
+patrol_distance = 210.0
+patrol_speed = 1.25
+vertical_bob = 15.0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Drone"]
+position = Vector2(0, 95)
+shape = SubResource("DroneShape")
+[node name="LightCone" type="Polygon2D" parent="Drone"]
+z_index = -1
+position = Vector2(0, 58)
+polygon = PackedVector2Array(-24, 0, 24, 0, 125, 175, -125, 175)
+color = Color(0.95, 0.22, 0.36, 0.26)
+[node name="DroneBody" type="Node2D" parent="Drone"]
+[node name="Shell" type="Polygon2D" parent="Drone/DroneBody"]
+polygon = PackedVector2Array(-34, -13, -18, -26, 18, -26, 34, -13, 28, 10, 14, 21, -14, 21, -28, 10)
+color = Color(0.12, 0.20, 0.22, 1)
+[node name="Eye" type="Polygon2D" parent="Drone/DroneBody"]
+polygon = PackedVector2Array(-12, -5, 12, -5, 16, 0, 12, 5, -12, 5, -16, 0)
+color = Color(1, 0.26, 0.34, 1)
+
+[node name="Memory3" type="Area2D" parent="."]
+position = Vector2(3890, 340)
+script = ExtResource("9_memory")
+memory_id = "M06"
+memory_text = "The final order was simple: erase anyone who still dreamed in the dark."
+shard_reward = 4
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Memory3"]
+shape = SubResource("CollectibleShape")
+[node name="Visual" type="Polygon2D" parent="Memory3"]
+polygon = PackedVector2Array(0, -24, 18, -18, 24, 0, 18, 18, 0, 24, -18, 18, -24, 0, -18, -18)
+color = Color(0.94, 0.55, 1, 0.95)
+
+[node name="Energy3" type="Area2D" parent="."]
+position = Vector2(4100, 445)
+script = ExtResource("3_energy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Energy3"]
+shape = SubResource("CollectibleShape")
+[node name="Crystal" type="Polygon2D" parent="Energy3"]
+polygon = PackedVector2Array(0, -22, 16, 0, 0, 22, -16, 0)
+color = Color(0.45, 1, 0.86, 1)
+[node name="Core" type="Polygon2D" parent="Energy3"]
+polygon = PackedVector2Array(0, -10, 7, 0, 0, 10, -7, 0)
+color = Color(0.95, 1, 1, 1)
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(4450, 455)
+script = ExtResource("12_exit")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit"]
+shape = SubResource("ExitShape")
+[node name="Frame" type="Polygon2D" parent="Exit"]
+polygon = PackedVector2Array(-40, -58, 40, -58, 40, 58, -40, 58)
+color = Color(0.16, 0.44, 0.38, 1)
+[node name="Glow" type="Polygon2D" parent="Exit"]
+polygon = PackedVector2Array(-30, -48, 30, -48, 30, 48, -30, 48)
+color = Color(0.45, 1, 0.84, 0.95)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="HUD"]
+offset_left = 28.0
+offset_top = 22.0
+offset_right = 590.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.78, 0.95, 0.9, 1)
+theme_override_font_sizes/font_size = 22
+text = "SHADOW RUN // LEVEL 06 — MEMORY VAULT"
+
+[node name="Controls" type="Label" parent="HUD"]
+offset_left = 30.0
+offset_top = 57.0
+offset_right = 800.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.58, 0.72, 0.75, 1)
+theme_override_font_sizes/font_size = 14
+text = "BLACKOUT reveals in SHADOW • decoys can trigger Hunters • timed gates don't wait"
+
+[node name="FragmentCounter" type="Label" parent="HUD"]
+offset_left = 885.0
+offset_top = 24.0
+offset_right = 1115.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.56, 0.95, 0.86, 1)
+theme_override_font_sizes/font_size = 16
+text = "ARCHIVE 0 / 3"
+horizontal_alignment = 2
+
+[node name="Mission" type="Label" parent="HUD"]
+offset_left = 245.0
+offset_top = 94.0
+offset_right = 905.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(0.68, 0.72, 0.88, 1)
+theme_override_font_sizes/font_size = 14
+text = "OPTIONAL: recover hidden memories • beat your best time"
+horizontal_alignment = 1
+
+[node name="AlertMessage" type="Label" parent="HUD"]
+visible = false
+offset_left = 220.0
+offset_top = 132.0
+offset_right = 930.0
+offset_bottom = 170.0
+theme_override_colors/font_color = Color(1, 0.48, 0.60, 1)
+theme_override_font_sizes/font_size = 19
+text = "ARCHIVE SECURITY"
+horizontal_alignment = 1
+
+[node name="Result" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/Result"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.005, 0.012, 0.025, 0.93)
+
+[node name="Card" type="ColorRect" parent="HUD/Result"]
+offset_left = 285.0
+offset_top = 135.0
+offset_right = 865.0
+offset_bottom = 515.0
+color = Color(0.025, 0.075, 0.075, 0.99)
+
+[node name="Accent" type="ColorRect" parent="HUD/Result/Card"]
+offset_right = 580.0
+offset_bottom = 5.0
+color = Color(0.40, 1, 0.82, 1)
+
+[node name="Title" type="Label" parent="HUD/Result/Card"]
+offset_left = 45.0
+offset_top = 55.0
+offset_right = 535.0
+offset_bottom = 110.0
+theme_override_colors/font_color = Color(0.75, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 34
+text = "MEMORY VAULT CLEARED"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/Result/Card"]
+offset_left = 45.0
+offset_top = 122.0
+offset_right = 535.0
+offset_bottom = 165.0
+theme_override_colors/font_color = Color(0.56, 0.85, 0.82, 1)
+theme_override_font_sizes/font_size = 18
+text = "YOU FOUND WHAT THE CORE COULDN'T ERASE."
+horizontal_alignment = 1
+
+[node name="Stats" type="Label" parent="HUD/Result/Card"]
+offset_left = 45.0
+offset_top = 210.0
+offset_right = 535.0
+offset_bottom = 250.0
+theme_override_colors/font_color = Color(0.72, 0.78, 0.86, 1)
+theme_override_font_sizes/font_size = 16
+text = "GRADE A • 00.0s"
+horizontal_alignment = 1
+
+[node name="Record" type="Label" parent="HUD/Result/Card"]
+visible = false
+offset_left = 45.0
+offset_top = 252.0
+offset_right = 535.0
+offset_bottom = 290.0
+theme_override_colors/font_color = Color(1, 0.82, 0.38, 1)
+theme_override_font_sizes/font_size = 17
+text = "NEW BEST TIME"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD/Result/Card"]
+offset_left = 45.0
+offset_top = 305.0
+offset_right = 535.0
+offset_bottom = 345.0
+theme_override_colors/font_color = Color(0.55, 0.95, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "ENTER  ending     R  replay"
+horizontal_alignment = 1

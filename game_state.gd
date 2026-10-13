@@ -6,6 +6,9 @@ var selected_skin := "shade"
 var shadow_shards := 0
 var max_unlocked_level := 1
 var best_grades := {}
+var best_times := {}
+var unlocked_memories := {}
+var s_rank_rewards := {}
 var intro_seen := false
 var ending_seen := false
 var unlocked_skins := {
@@ -14,6 +17,8 @@ var unlocked_skins := {
 }
 var premium_wraith_owned := false
 var premium_specter_owned := false
+var shard_combo_count := 0
+var shard_combo_timer := 0.0
 
 const SKIN_ORDER := ["shade", "neon", "ember", "frost", "void", "wraith", "specter"]
 
@@ -107,6 +112,11 @@ const SKINS := {
 func _ready() -> void:
 	load_progress()
 
+func _process(delta: float) -> void:
+	shard_combo_timer = max(shard_combo_timer - delta, 0.0)
+	if shard_combo_timer <= 0.0:
+		shard_combo_count = 0
+
 func is_owned(skin_id: String) -> bool:
 	if skin_id == "wraith":
 		return premium_wraith_owned
@@ -137,6 +147,17 @@ func purchase_skin(skin_id: String) -> bool:
 	save_progress()
 	return true
 
+func collect_combo_shard() -> Dictionary:
+	if shard_combo_timer > 0.0:
+		shard_combo_count += 1
+	else:
+		shard_combo_count = 1
+	shard_combo_timer = 2.4
+	var bonus := mini(2, int((shard_combo_count - 1) / 3))
+	var reward := 1 + bonus
+	add_shards(reward)
+	return {"reward": reward, "combo": shard_combo_count}
+
 func add_shards(amount: int) -> void:
 	shadow_shards += max(amount, 0)
 	save_progress()
@@ -151,6 +172,9 @@ func save_progress() -> void:
 	config.set_value("progress", "shadow_shards", shadow_shards)
 	config.set_value("progress", "max_unlocked_level", max_unlocked_level)
 	config.set_value("progress", "best_grades", best_grades)
+	config.set_value("progress", "best_times", best_times)
+	config.set_value("progress", "unlocked_memories", unlocked_memories)
+	config.set_value("progress", "s_rank_rewards", s_rank_rewards)
 	config.set_value("progress", "intro_seen", intro_seen)
 	config.set_value("progress", "ending_seen", ending_seen)
 	config.set_value("progress", "unlocked_skins", unlocked_skins)
@@ -166,11 +190,16 @@ func load_progress() -> void:
 	shadow_shards = int(config.get_value("progress", "shadow_shards", 0))
 	max_unlocked_level = int(config.get_value("progress", "max_unlocked_level", 1))
 	best_grades = config.get_value("progress", "best_grades", {})
+	best_times = config.get_value("progress", "best_times", {})
+	unlocked_memories = config.get_value("progress", "unlocked_memories", {})
+	s_rank_rewards = config.get_value("progress", "s_rank_rewards", {})
 	intro_seen = bool(config.get_value("progress", "intro_seen", false))
 	ending_seen = bool(config.get_value("progress", "ending_seen", false))
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
 	premium_wraith_owned = bool(config.get_value("progress", "premium_wraith_owned", false))
 	premium_specter_owned = bool(config.get_value("progress", "premium_specter_owned", false))
+	if best_grades.has("5"):
+		max_unlocked_level = max(max_unlocked_level, 6)
 
 
 func calculate_grade(time_seconds: float, deaths: int, fragments: int, par_time: float) -> String:
@@ -199,4 +228,25 @@ func submit_grade(level_number: int, grade: String) -> void:
 	var previous := str(best_grades.get(key, ""))
 	if previous == "" or int(order.get(grade, 0)) > int(order.get(previous, -1)):
 		best_grades[key] = grade
+
+	if grade == "S" and not bool(s_rank_rewards.get(key, false)):
+		s_rank_rewards[key] = true
+		shadow_shards += 5
+
+	save_progress()
+
+
+func submit_time(level_number: int, time_seconds: float) -> bool:
+	var key := str(level_number)
+	var previous := float(best_times.get(key, 999999.0))
+	if time_seconds < previous:
+		best_times[key] = time_seconds
 		save_progress()
+		return true
+	return false
+
+func unlock_memory(memory_id: String, memory_text: String) -> void:
+	if unlocked_memories.has(memory_id):
+		return
+	unlocked_memories[memory_id] = memory_text
+	save_progress()

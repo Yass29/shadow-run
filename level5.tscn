@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3]
+[gd_scene load_steps=29 format=3]
 
 [ext_resource type="Script" path="res://player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://hero.tscn" id="2_hero"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://shadow_portal.gd" id="12_portal"]
 [ext_resource type="Script" path="res://secret_cache.gd" id="13_secret"]
 [ext_resource type="Script" path="res://core_boss.gd" id="14_boss"]
+[ext_resource type="Script" path="res://memory_collectible.gd" id="15_memory"]
 
 [sub_resource type="RectangleShape2D" id="PlayerShape"]
 size = Vector2(40, 68)
@@ -62,6 +63,9 @@ radius = 22.0
 
 [sub_resource type="CircleShape2D" id="BossPointShape"]
 radius = 24.0
+
+[sub_resource type="CircleShape2D" id="MemoryShape"]
+radius = 20.0
 
 [node name="Level5" type="Node2D"]
 script = ExtResource("4_level")
@@ -417,6 +421,17 @@ shape = SubResource("BossPointShape")
 polygon = PackedVector2Array(0, -24, 18, -18, 24, 0, 18, 18, 0, 24, -18, 18, -24, 0, -18, -18)
 color = Color(0.76, 0.38, 1, 1)
 
+[node name="MemoryM03" type="Area2D" parent="."]
+position = Vector2(2860, 285)
+script = ExtResource("15_memory")
+memory_id = "M03"
+memory_text = "The first person erased by the Core was you."
+shard_reward = 3
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MemoryM03"]
+shape = SubResource("MemoryShape")
+[node name="Visual" type="Polygon2D" parent="MemoryM03"]
+polygon = PackedVector2Array(0, -23, 17, -17, 23, 0, 17, 17, 0, 23, -17, 17, -23, 0, -17, -17)
+color = Color(1, 0.52, 0.78, 0.95)
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="Title" type="Label" parent="HUD"]
@@ -538,5 +553,5 @@ offset_right = 545.0
 offset_bottom = 345.0
 theme_override_colors/font_color = Color(0.55, 0.95, 0.85, 1)
 theme_override_font_sizes/font_size = 16
-text = "ENTER  main menu     R  replay"
+text = "ENTER  Memory Vault     R  replay"
 horizontal_alignment = 1

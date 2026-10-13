@@ -249,3 +249,7 @@ func apply_selected_skin() -> void:
 		body.get_node("Scarf").color = skin["scarf"]
 	if body.has_node("Core"):
 		body.get_node("Core").color = skin["core"]
+	if dash_trail != null:
+		var trail_color: Color = skin["core"]
+		trail_color.a = 0.48
+		dash_trail.default_color = trail_color
