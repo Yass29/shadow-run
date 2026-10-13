@@ -6,6 +6,8 @@ var selected_skin := "shade"
 var shadow_shards := 0
 var max_unlocked_level := 1
 var best_grades := {}
+var best_times := {}
+var unlocked_memories := {}
 var intro_seen := false
 var ending_seen := false
 var unlocked_skins := {
@@ -151,6 +153,8 @@ func save_progress() -> void:
 	config.set_value("progress", "shadow_shards", shadow_shards)
 	config.set_value("progress", "max_unlocked_level", max_unlocked_level)
 	config.set_value("progress", "best_grades", best_grades)
+	config.set_value("progress", "best_times", best_times)
+	config.set_value("progress", "unlocked_memories", unlocked_memories)
 	config.set_value("progress", "intro_seen", intro_seen)
 	config.set_value("progress", "ending_seen", ending_seen)
 	config.set_value("progress", "unlocked_skins", unlocked_skins)
@@ -166,6 +170,8 @@ func load_progress() -> void:
 	shadow_shards = int(config.get_value("progress", "shadow_shards", 0))
 	max_unlocked_level = int(config.get_value("progress", "max_unlocked_level", 1))
 	best_grades = config.get_value("progress", "best_grades", {})
+	best_times = config.get_value("progress", "best_times", {})
+	unlocked_memories = config.get_value("progress", "unlocked_memories", {})
 	intro_seen = bool(config.get_value("progress", "intro_seen", false))
 	ending_seen = bool(config.get_value("progress", "ending_seen", false))
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
@@ -200,3 +206,19 @@ func submit_grade(level_number: int, grade: String) -> void:
 	if previous == "" or int(order.get(grade, 0)) > int(order.get(previous, -1)):
 		best_grades[key] = grade
 		save_progress()
+
+
+func submit_time(level_number: int, time_seconds: float) -> bool:
+	var key := str(level_number)
+	var previous := float(best_times.get(key, 999999.0))
+	if time_seconds < previous:
+		best_times[key] = time_seconds
+		save_progress()
+		return true
+	return false
+
+func unlock_memory(memory_id: String, memory_text: String) -> void:
+	if unlocked_memories.has(memory_id):
+		return
+	unlocked_memories[memory_id] = memory_text
+	save_progress()
