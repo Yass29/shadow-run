@@ -13,6 +13,9 @@ const PAR_TIME := 90.0
 
 func _ready() -> void:
 	update_counter()
+	$Exit.monitoring = false
+	$Exit.visible = false
+	$HUD/BossMessage.visible = false
 
 func _process(_delta: float) -> void:
 	elapsed_time += _delta
@@ -44,6 +47,24 @@ func respawn_player(message: String = "CORE DEFENSE TRIGGERED.") -> void:
 	alert.visible = false
 	respawning = false
 
+
+func start_boss_encounter() -> void:
+	if checkpoint.x < 3290.0:
+		checkpoint = Vector2(3290, 420)
+		AudioManager.play_sfx("checkpoint")
+		FXManager.checkpoint_burst(checkpoint)
+	$HUD/BossMessage.text = "CORE SENTINEL — vanish during SCAN, touch both anchors in SHADOW."
+	$HUD/BossMessage.visible = true
+
+func boss_hit(hits: int) -> void:
+	$HUD/BossMessage.text = "CORE SENTINEL   ANCHORS %d / 2" % hits
+
+func boss_defeated() -> void:
+	$HUD/BossMessage.text = "CORE SENTINEL DOWN — EXIT OPEN."
+	$Exit.visible = true
+	$Exit.monitoring = true
+	await get_tree().create_timer(2.0).timeout
+	$HUD/BossMessage.visible = false
 
 func get_run_summary() -> Dictionary:
 	var grade := GameState.calculate_grade(elapsed_time, deaths, fragments, PAR_TIME)
