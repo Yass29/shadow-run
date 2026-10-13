@@ -24,6 +24,7 @@ func _on_body_entered(body: Node) -> void:
 	var level := get_parent()
 	var hud := level.get_node("HUD")
 	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_time(4, float(summary["time"]))
 	GameState.submit_grade(4, str(summary["grade"]))
 	hud.get_node("Title").visible = false
 	hud.get_node("Controls").visible = false
