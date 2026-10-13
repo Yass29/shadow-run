@@ -195,6 +195,8 @@ func load_progress() -> void:
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
 	premium_wraith_owned = bool(config.get_value("progress", "premium_wraith_owned", false))
 	premium_specter_owned = bool(config.get_value("progress", "premium_specter_owned", false))
+	if best_grades.has("5"):
+		max_unlocked_level = max(max_unlocked_level, 6)
 
 
 func calculate_grade(time_seconds: float, deaths: int, fragments: int, par_time: float) -> String:
