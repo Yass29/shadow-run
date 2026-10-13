@@ -17,10 +17,11 @@ var unlocked_skins := {
 }
 var premium_wraith_owned := false
 var premium_specter_owned := false
+var memory_master_reward_claimed := false
 var shard_combo_count := 0
 var shard_combo_timer := 0.0
 
-const SKIN_ORDER := ["shade", "neon", "ember", "frost", "void", "wraith", "specter"]
+const SKIN_ORDER := ["shade", "neon", "ember", "frost", "void", "echo", "wraith", "specter"]
 
 const SKINS := {
 	"shade": {
@@ -83,6 +84,19 @@ const SKINS := {
 		"scarf": Color(0.60, 0.20, 0.86, 1.0),
 		"core": Color(0.95, 0.42, 1.0, 1.0)
 	},
+	"echo": {
+		"name": "ECHO",
+		"premium": false,
+		"memory_reward": true,
+		"cost": 0,
+		"price": "",
+		"torso": Color(0.10, 0.24, 0.26, 1.0),
+		"cape": Color(0.05, 0.10, 0.16, 1.0),
+		"head": Color(0.035, 0.08, 0.12, 1.0),
+		"eyes": Color(0.78, 1.0, 0.92, 1.0),
+		"scarf": Color(0.38, 1.0, 0.80, 1.0),
+		"core": Color(0.72, 1.0, 0.94, 1.0)
+	},
 	"wraith": {
 		"name": "WRAITH",
 		"premium": true,
@@ -137,6 +151,8 @@ func purchase_skin(skin_id: String) -> bool:
 	var skin = SKINS[skin_id]
 	if bool(skin["premium"]):
 		return false
+	if bool(skin.get("memory_reward", false)):
+		return false
 	if is_owned(skin_id):
 		return true
 	var cost := int(skin["cost"])
@@ -180,6 +196,7 @@ func save_progress() -> void:
 	config.set_value("progress", "unlocked_skins", unlocked_skins)
 	config.set_value("progress", "premium_wraith_owned", premium_wraith_owned)
 	config.set_value("progress", "premium_specter_owned", premium_specter_owned)
+	config.set_value("progress", "memory_master_reward_claimed", memory_master_reward_claimed)
 	config.save(SAVE_PATH)
 
 func load_progress() -> void:
@@ -198,6 +215,8 @@ func load_progress() -> void:
 	unlocked_skins = config.get_value("progress", "unlocked_skins", {"shade": true, "neon": true})
 	premium_wraith_owned = bool(config.get_value("progress", "premium_wraith_owned", false))
 	premium_specter_owned = bool(config.get_value("progress", "premium_specter_owned", false))
+	memory_master_reward_claimed = bool(config.get_value("progress", "memory_master_reward_claimed", false))
+	check_memory_master_reward()
 	if best_grades.has("5"):
 		max_unlocked_level = max(max_unlocked_level, 6)
 
@@ -249,4 +268,17 @@ func unlock_memory(memory_id: String, memory_text: String) -> void:
 	if unlocked_memories.has(memory_id):
 		return
 	unlocked_memories[memory_id] = memory_text
+	check_memory_master_reward()
 	save_progress()
+
+func check_memory_master_reward() -> bool:
+	if memory_master_reward_claimed:
+		return false
+	if unlocked_memories.size() < 6:
+		return false
+
+	memory_master_reward_claimed = true
+	unlocked_skins["echo"] = true
+	shadow_shards += 10
+	save_progress()
+	return true
