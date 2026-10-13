@@ -7,7 +7,7 @@ func _ready() -> void:
 	build_memories()
 
 func build_memories() -> void:
-	var list: VBoxContainer = $Panel/List
+	var list: VBoxContainer = $Scroll/Panel/List
 	for child in list.get_children():
 		child.queue_free()
 
