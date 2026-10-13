@@ -16,6 +16,8 @@ var unlocked_skins := {
 }
 var premium_wraith_owned := false
 var premium_specter_owned := false
+var shard_combo_count := 0
+var shard_combo_timer := 0.0
 
 const SKIN_ORDER := ["shade", "neon", "ember", "frost", "void", "wraith", "specter"]
 
@@ -109,6 +111,11 @@ const SKINS := {
 func _ready() -> void:
 	load_progress()
 
+func _process(delta: float) -> void:
+	shard_combo_timer = max(shard_combo_timer - delta, 0.0)
+	if shard_combo_timer <= 0.0:
+		shard_combo_count = 0
+
 func is_owned(skin_id: String) -> bool:
 	if skin_id == "wraith":
 		return premium_wraith_owned
@@ -138,6 +145,17 @@ func purchase_skin(skin_id: String) -> bool:
 	unlocked_skins[skin_id] = true
 	save_progress()
 	return true
+
+func collect_combo_shard() -> Dictionary:
+	if shard_combo_timer > 0.0:
+		shard_combo_count += 1
+	else:
+		shard_combo_count = 1
+	shard_combo_timer = 2.4
+	var bonus := mini(2, int((shard_combo_count - 1) / 3))
+	var reward := 1 + bonus
+	add_shards(reward)
+	return {"reward": reward, "combo": shard_combo_count}
 
 func add_shards(amount: int) -> void:
 	shadow_shards += max(amount, 0)
