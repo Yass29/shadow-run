@@ -21,7 +21,7 @@ func build_levels() -> void:
 
 	for data in LEVELS:
 		var row := Button.new()
-		row.custom_minimum_size = Vector2(760, 64)
+		row.custom_minimum_size = Vector2(760, 48)
 		var unlocked := int(data["number"]) <= GameState.max_unlocked_level
 		row.disabled = not unlocked
 		var grade := str(GameState.best_grades.get(str(data["number"]), ""))
