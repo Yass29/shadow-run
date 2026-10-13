@@ -23,6 +23,7 @@ func _on_body_entered(body: Node) -> void:
 	var level := get_parent()
 	var hud := level.get_node("HUD")
 	var summary: Dictionary = level.get_run_summary()
+	GameState.submit_time(2, float(summary["time"]))
 	GameState.submit_grade(2, str(summary["grade"]))
 	body.velocity = Vector2.ZERO
 	body.set_physics_process(false)
