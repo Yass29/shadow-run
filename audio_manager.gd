@@ -3,7 +3,7 @@ extends Node
 const MIX_RATE := 44100
 
 func play_sfx(kind: String) -> void:
-	var spec := {
+	var specs: Dictionary = {
 		"shadow_in": [150.0, 0.10, -8.0],
 		"shadow_out": [260.0, 0.08, -10.0],
 		"dash": [420.0, 0.09, -6.0],
@@ -11,7 +11,8 @@ func play_sfx(kind: String) -> void:
 		"checkpoint": [520.0, 0.20, -7.0],
 		"victory": [660.0, 0.28, -6.0],
 		"alert": [120.0, 0.16, -5.0]
-	}.get(kind, [300.0, 0.10, -10.0])
+	}
+	var spec: Array = specs.get(kind, [300.0, 0.10, -10.0]) as Array
 
 	var player := AudioStreamPlayer.new()
 	player.stream = make_tone(float(spec[0]), float(spec[1]))
